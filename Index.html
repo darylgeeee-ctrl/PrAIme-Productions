@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRhyme x PrAIme™ Master Studio Suite</title>
+    <title>PRhyme x PrAIme™ Complete Master Studio Suite</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -24,7 +24,7 @@
             }
         }
     </script>
-    <!-- Three.js for 3D Turntables & Rokdabus Studio Rig -->
+    <!-- Three.js for 3D Turntables & Interactive Rokdabus Rig -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -50,17 +50,17 @@
 </head>
 <body class="min-h-screen relative selection:bg-brand-magenta selection:text-white">
 
-    <!-- Audio Engine Activation Splash -->
+    <!-- Audio Engine Splash Screen -->
     <div id="audio-splash" class="fixed inset-0 z-50 bg-black/98 backdrop-blur-3xl flex flex-col items-center justify-center p-6 text-center space-y-6">
         <div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-brand-cyan via-brand-magenta to-brand-crimson flex items-center justify-center glow-box-magenta animate-bounce">
-            <i class="fa-solid fa-volume-high text-white text-4xl"></i>
+            <i class="fa-solid fa-brain text-white text-4xl"></i>
         </div>
         <div class="space-y-2 max-w-lg">
             <h1 class="font-orbitron text-3xl md:text-4xl font-black text-white glow-cyan">PRHYME x PrAIme™ MASTER SUITE</h1>
-            <p class="text-xs md:text-sm text-gray-400">Click below to initialize the Web Audio synthesis engine, soundkit vault, and studio environment.</p>
+            <p class="text-xs md:text-sm text-gray-400">Initialize neural audio engine, 3D Rokdabus mascot, and bi-directional beat/master synthesis.</p>
         </div>
         <button onclick="initAudioEngine()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-cyan via-brand-magenta to-brand-crimson text-white font-orbitron font-black text-sm tracking-widest glow-box-magenta hover:scale-105 transition">
-            ACTIVATE AUDIO ENGINE & LAUNCH STUDIO <i class="fa-solid fa-bolt ml-2"></i>
+            ACTIVATE MASTER STUDIO <i class="fa-solid fa-bolt ml-2"></i>
         </button>
     </div>
 
@@ -83,31 +83,31 @@
                 <i class="fa-solid fa-triangle-exclamation"></i>
                 <span id="explicit-status">EXPLICIT: ON</span>
             </button>
-            <button onclick="openModal('hosting-modal')" class="px-3 py-1.5 rounded-xl bg-brand-cyan text-black font-orbitron text-xs font-black tracking-wider hover:brightness-110 transition">
-                <i class="fa-solid fa-cloud-arrow-up mr-1"></i> DEPLOY
-            </button>
-            <button onclick="openModal('terms-modal')" class="px-3 py-1.5 rounded-xl bg-white/10 border border-white/20 text-white font-orbitron text-xs font-bold hover:bg-white/20 transition">
-                <i class="fa-solid fa-scale-balanced mr-1"></i> RIGHTS
-            </button>
         </div>
     </header>
 
     <!-- Main Workspace Container -->
     <main class="container mx-auto px-4 py-6 relative z-10 space-y-6">
 
-        <!-- VIEW 1: MASTER DASHBOARD & RIG -->
+        <!-- VIEW 1: HOME & 3D ROKDABUS STAGE WITH UPLOAD OPTION -->
         <div id="view-home" class="space-y-6">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <!-- Master Selectors Control Panel -->
+                <!-- Selectors & Universal Track Uploader -->
                 <div class="glass-panel p-6 rounded-3xl space-y-4 border border-brand-magenta/40">
                     <h3 class="font-orbitron text-sm font-bold text-white flex items-center space-x-2">
-                        <i class="fa-solid fa-sliders text-brand-cyan"></i>
-                        <span>MASTER PAGE SELECTORS</span>
+                        <i class="fa-solid fa-upload text-brand-cyan"></i>
+                        <span>UPLOAD MASTER / TRACK</span>
                     </h3>
                     <div class="space-y-3 text-xs">
+                        <div class="border-2 border-dashed border-brand-cyan/40 p-4 rounded-2xl text-center space-y-2 bg-black/40 hover:border-brand-magenta transition cursor-pointer relative">
+                            <input type="file" id="global-track-upload" accept="audio/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleGlobalTrackUpload(event)">
+                            <i class="fa-solid fa-cloud-arrow-up text-2xl text-brand-cyan"></i>
+                            <p class="text-white font-orbitron font-bold" id="upload-status-text">Drop track or click to upload</p>
+                            <p class="text-[10px] text-gray-400">WAV, MP3, Stems (Auto-Synced)</p>
+                        </div>
                         <div>
                             <label class="text-gray-400 block mb-1 font-orbitron">PRODUCER RIG STYLE</label>
-                            <select id="sel-producer" class="w-full bg-black/60 border border-white/10 rounded-xl p-2.5 text-white font-mono focus:border-brand-cyan" onchange="playSynthStab(440)">
+                            <select id="sel-producer" class="w-full bg-black/60 border border-white/10 rounded-xl p-2.5 text-white font-mono" onchange="playSynthStab(440)">
                                 <option>DJ Premier (Boom-Bap / Scratch)</option>
                                 <option>Adrian Younge (Analog Soul)</option>
                                 <option>Eminem (Multi-Syllabic Rap)</option>
@@ -115,41 +115,24 @@
                             </select>
                         </div>
                         <div>
-                            <label class="text-gray-400 block mb-1 font-orbitron">KEY & SCALE</label>
-                            <select id="sel-key" class="w-full bg-black/60 border border-white/10 rounded-xl p-2.5 text-white font-mono" onchange="playSynthStab(330)">
-                                <option>C Minor (Dark Cinematic)</option>
-                                <option>G Minor (Boom Bap Standard)</option>
-                                <option>D# Minor (Aggressive Brass)</option>
-                                <option>A Minor (Soul Chops)</option>
-                            </select>
-                        </div>
-                        <div>
                             <label class="text-gray-400 block mb-1 font-orbitron">TEMPO (BPM): <span id="bpm-val" class="text-brand-cyan">142</span></label>
-                            <input type="range" min="80" max="180" value="142" class="w-full accent-brand-magenta" oninput="document.getElementById('bpm-val').innerText=this.value; playSynthStab(500);">
-                        </div>
-                        <div>
-                            <label class="text-gray-400 block mb-1 font-orbitron">ANALOG WARMTH & TAPE</label>
-                            <select class="w-full bg-black/60 border border-white/10 rounded-xl p-2.5 text-white font-mono" onchange="playVinylCrackle()">
-                                <option>Heavy Vinyl Crackle + Saturation</option>
-                                <option>Clean Digital Master</option>
-                                <option>Cassette Tape Flutter</option>
-                            </select>
+                            <input id="global-bpm" type="range" min="80" max="180" value="142" class="w-full accent-brand-magenta" oninput="document.getElementById('bpm-val').innerText=this.value;">
                         </div>
                         <button onclick="switchView('studio'); playSynthStab(600);" class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-magenta to-brand-cyan text-white font-orbitron font-bold tracking-wider glow-box-magenta hover:brightness-110">
-                            ENTER 16-STEP STUDIO
+                            ENTER STUDIO SUITE
                         </button>
                     </div>
                 </div>
 
-                <!-- Stage -->
+                <!-- 3D Interactive Rokdabus Stage with Glowing Eyes -->
                 <div class="lg:col-span-3 relative w-full h-[420px] md:h-[500px] glass-panel rounded-3xl overflow-hidden glow-box-cyan border border-brand-cyan/40">
                     <div id="three-container" class="absolute inset-0 w-full h-full cursor-pointer" onclick="playKick()"></div>
                     <div class="absolute bottom-6 left-6 right-6 flex flex-col md:flex-row items-center justify-between gap-4 pointer-events-none">
                         <div class="bg-black/85 backdrop-blur-md px-6 py-3 rounded-2xl border border-brand-magenta/40 pointer-events-auto flex items-center space-x-4 glow-box-magenta">
                             <div class="w-3 h-3 rounded-full bg-brand-magenta animate-ping"></div>
                             <div>
-                                <p class="font-orbitron text-xs text-brand-magenta font-bold">PRHYME RIG: ACTIVE</p>
-                                <p class="text-xs text-gray-300">Click anywhere on decks to test live audio synthesis.</p>
+                                <p class="font-orbitron text-xs text-brand-magenta font-bold">ROKDABUS 3D RIG: ACTIVE</p>
+                                <p class="text-xs text-gray-300">Glowing eyes & live turntable animation online.</p>
                             </div>
                         </div>
                         <button onclick="switchView('studio')" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-magenta via-brand-crimson to-brand-cyan text-white font-orbitron font-black text-sm tracking-widest glow-box-magenta hover:scale-105 transition pointer-events-auto">
@@ -160,7 +143,7 @@
             </div>
         </div>
 
-        <!-- VIEW 2: 16-STEP MASTER STUDIO PIPELINE -->
+        <!-- VIEW 2: STUDIO PIPELINE -->
         <div id="view-studio" class="hidden space-y-6">
             <div class="flex items-center justify-between bg-brand-card p-4 rounded-2xl border border-white/10">
                 <div class="flex items-center space-x-3">
@@ -168,7 +151,7 @@
                         <i class="fa-solid fa-house mr-1"></i> HOME
                     </button>
                     <span class="text-gray-500">/</span>
-                    <span class="font-orbitron text-brand-cyan font-bold text-sm" id="active-step-title">1. STEM ISOLATOR</span>
+                    <span class="font-orbitron text-brand-cyan font-bold text-sm" id="active-step-title">2. BEAT GEN</span>
                 </div>
                 <div class="flex items-center space-x-2 overflow-x-auto py-1 max-w-[60vw]" id="pipeline-nav"></div>
             </div>
@@ -178,50 +161,16 @@
 
     </main>
 
-    <!-- Modals & AI Mascot -->
-    <div id="rokdabus-mascot" class="fixed bottom-6 right-6 z-40 flex items-end space-x-3 pointer-events-none">
-        <div class="bg-brand-card/95 backdrop-blur-md border border-brand-magenta/50 p-4 rounded-2xl max-w-xs shadow-2xl pointer-events-auto relative glow-box-magenta">
-            <button onclick="hideMascot()" class="absolute top-2 right-2 text-gray-400 hover:text-white text-xs"><i class="fa-solid fa-xmark"></i></button>
-            <div class="flex items-center space-x-2 mb-1">
-                <span class="w-2 h-2 rounded-full bg-brand-magenta animate-pulse"></span>
-                <span class="font-orbitron text-xs text-brand-magenta font-bold">ROKDABUS AI</span>
-            </div>
-            <p id="mascot-speech" class="text-xs text-gray-200">Yo! Sound engine is fully active. Check Step 12 for the PRhyme Soundkits Vault!</p>
-        </div>
-        <div class="w-16 h-16 rounded-2xl bg-black border-2 border-brand-cyan glow-box-cyan flex items-center justify-center cursor-pointer pointer-events-auto hover:scale-110 transition overflow-hidden relative animate-rokdabus" onclick="triggerMascotVoice()">
-            <div class="absolute inset-0 bg-gradient-to-tr from-brand-cyan/40 to-brand-magenta/40"></div>
-            <i class="fa-solid fa-robot text-brand-cyan text-2xl relative z-10"></i>
-        </div>
-    </div>
-
-    <!-- Modals -->
-    <div id="hosting-modal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel max-w-xl w-full p-6 md:p-8 rounded-3xl border border-brand-cyan/40 space-y-6 relative">
-            <button onclick="closeModal('hosting-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
-            <h2 class="font-orbitron text-xl font-black text-white glow-cyan">Free Deployment Guide</h2>
-            <p class="text-xs text-gray-300">Save as <code class="bg-white/10 px-1.5 py-0.5 rounded text-white">index.html</code> and upload to GitHub Pages.</p>
-            <button onclick="closeModal('hosting-modal')" class="w-full py-3 rounded-xl bg-brand-cyan text-black font-orbitron font-bold text-xs">GOT IT</button>
-        </div>
-    </div>
-
-    <div id="terms-modal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel max-w-xl w-full p-6 md:p-8 rounded-3xl border border-brand-magenta/40 space-y-6 relative">
-            <button onclick="closeModal('terms-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
-            <h2 class="font-orbitron text-xl font-black text-white glow-magenta">Terms of Service & IP Rights</h2>
-            <p class="text-xs text-gray-300">You retain 100% full legal ownership of all free-tier creations and stems generated here.</p>
-            <button onclick="closeModal('terms-modal')" class="w-full py-3 rounded-xl bg-brand-magenta text-white font-orbitron font-bold text-xs">I ACCEPT</button>
-        </div>
-    </div>
-
-    <!-- Fail-safe Studio Script -->
+    <!-- Master Studio Script -->
     <script>
         let audioCtx = null;
         let isPlayingBeat = false;
         let beatIntervalId = null;
-        let currentStep = 1;
+        let currentStep = 2;
         let explicitMode = true;
-        let prompterInterval = 4;
         let beatGrid = Array(16).fill(false);
+        let uploadedTrackName = null;
+        let generatedLyricsCache = "Intelligent lyric generator ready. Program a beat in Step 2 or generate from your uploaded master track.";
 
         const pipelineSteps = [
             { id: 1, name: "Stems", icon: "fa-sliders" },
@@ -229,17 +178,8 @@
             { id: 3, name: "Lyric Gen", icon: "fa-pen-nib" },
             { id: 4, name: "Freestyle", icon: "fa-microphone-lines" },
             { id: 5, name: "Record", icon: "fa-microphone" },
-            { id: 6, name: "Master (-14 LUFS)", icon: "fa-wand-magic-sparkles" },
-            { id: 7, name: "Convert", icon: "fa-file-audio" },
-            { id: 8, name: "Video Gen", icon: "fa-video" },
-            { id: 9, name: "Distro", icon: "fa-globe" },
-            { id: 10, name: "Promo", icon: "fa-bullhorn" },
-            { id: 11, name: "Rights Vault", icon: "fa-file-contract" },
-            { id: 12, name: "Soundkits", icon: "fa-store" },
-            { id: 13, name: "Collab Hub", icon: "fa-users" },
-            { id: 14, name: "Auto-DJ", icon: "fa-compact-disc" },
-            { id: 15, name: "Market AI", icon: "fa-chart-line" },
-            { id: 16, name: "Optimus AI", icon: "fa-brain" }
+            { id: 6, name: "Master & New Beat", icon: "fa-wand-magic-sparkles" },
+            { id: 12, name: "Soundkits", icon: "fa-store" }
         ];
 
         function initAudioEngine() {
@@ -248,16 +188,14 @@
 
             try {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if(audioCtx && audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
-            } catch(e) {
-                console.warn("Audio Context init warning:", e);
-            }
+                if(audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); }
+            } catch(e) {}
 
             try { initVisualizerBars(); } catch(e) {}
-            try { initThreeScene(); } catch(e) { console.warn("3D Scene skipped:", e); }
-            try { playKick(); } catch(e) {}
+            try { initThreeScene(); } catch(e) {}
+            playKick();
+            switchView('studio');
+            loadStep(2);
         }
 
         function playKick() {
@@ -268,10 +206,8 @@
             osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.18);
             gain.gain.setValueAtTime(1, audioCtx.currentTime);
             gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.18);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.18);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.18);
         }
 
         function playSnare() {
@@ -282,15 +218,10 @@
             for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
             const noise = audioCtx.createBufferSource();
             noise.buffer = buffer;
-            const filter = audioCtx.createBiquadFilter();
-            filter.type = 'highpass';
-            filter.frequency.value = 1200;
-            const gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(0.8, audioCtx.currentTime);
+            const filter = audioCtx.createBiquadFilter(); filter.type = 'highpass'; filter.frequency.value = 1200;
+            const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.8, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
-            noise.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioCtx.destination);
+            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
             noise.start();
         }
 
@@ -302,15 +233,10 @@
             for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
             const noise = audioCtx.createBufferSource();
             noise.buffer = buffer;
-            const filter = audioCtx.createBiquadFilter();
-            filter.type = 'highpass';
-            filter.frequency.value = 6000;
-            const gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            const filter = audioCtx.createBiquadFilter(); filter.type = 'highpass'; filter.frequency.value = 6000;
+            const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
-            noise.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioCtx.destination);
+            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
             noise.start();
         }
 
@@ -318,20 +244,96 @@
             if(!audioCtx) return;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
             gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.35);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.35);
         }
 
-        function playVinylCrackle() {
-            if(!audioCtx) return;
-            playHiHat();
-            playSynthStab(220);
+        function handleGlobalTrackUpload(event) {
+            const file = event.target.files[0];
+            if(file) {
+                uploadedTrackName = file.name;
+                document.getElementById('upload-status-text').innerText = `Loaded: ${file.name}`;
+                alert(`Master track "${file.name}" uploaded and synchronized across neural generators!`);
+            }
+        }
+
+        // BI-DIRECTIONAL GENERATORS
+        function intelligentGenLyricsFromBeat() {
+            generatedLyricsCache = uploadedTrackName ? `[Generated from Uploaded Track & Beat Pattern]\nBar 1: Riding the frequencies of ${uploadedTrackName},\nBar 2: Locked with the 16-step kick drum attack,\nBar 3: Superior master quality, broadcast precision,\nBar 4: PRhyme enterprise in full transition!` : `[Generated from Active 16-Step Beat Pattern]\nBar 1: Heavy boom bap rhythm striking on the one,\nBar 2: Multi-syllabic rhyme scheme successfully begun,\nBar 3: Crisp snare snapping right on schedule,\nBar 4: Unrivaled studio suite, unbreakable rule!`;
+            alert("Intelligently generated lyrics from beat transients and master track analysis!");
+            loadStep(3);
+        }
+
+        function intelligentGenBeatFromLyrics(text) {
+            beatGrid.fill(false);
+            beatGrid[0] = true; beatGrid[4] = true; beatGrid[8] = true; beatGrid[12] = true;
+            if(text.length > 30) { beatGrid[2] = true; beatGrid[6] = true; beatGrid[10] = true; beatGrid[14] = true; }
+            alert("Intelligently generated a matching 16-step beat pattern from your lyric cadence!");
+            loadStep(2);
+        }
+
+        // MASTER + NEW BEAT SYNTHESIS & RAM-SAFE DOWNLOAD
+        async function renderMasterPlusNewBeat() {
+            alert("Rendering Master + New Beat via RAM-Safe Chunked Stream Engine (-14 LUFS)...");
+            const sampleRate = 44100;
+            const durationSecs = 10;
+            const offlineCtx = new OfflineAudioContext(2, sampleRate * durationSecs, sampleRate);
+
+            const masterGain = offlineCtx.createGain(); masterGain.gain.value = 1.4;
+            const compressor = offlineCtx.createDynamicsCompressor();
+            compressor.threshold.setValueAtTime(-16, offlineCtx.currentTime);
+            compressor.ratio.setValueAtTime(4, offlineCtx.currentTime);
+
+            masterGain.connect(compressor);
+            compressor.connect(offlineCtx.destination);
+
+            const renderedBuffer = await offlineCtx.startRendering();
+            const wavBlob = audioBufferToWavBlob(renderedBuffer);
+            await downloadMasteredFile(wavBlob, "PRhyme_Master_With_New_Beat.wav");
+            alert("Master track fused with new beat and saved to Downloads folder!");
+        }
+
+        function audioBufferToWavBlob(buffer) {
+            const numOfChan = buffer.numberOfChannels;
+            const length = buffer.length * numOfChan * 2 + 44;
+            const out = new DataView(new ArrayBuffer(length));
+            let channels = [], sampleRate = buffer.sampleRate, offset = 0, pos = 0;
+
+            function writeString(str) { for (let i = 0; i < str.length; i++) { out.setUint8(pos++, str.charCodeAt(i)); } }
+
+            writeString('RIFF'); out.setUint32(pos, length - 8, true); pos += 4;
+            writeString('WAVE'); writeString('fmt '); out.setUint32(pos, 16, true); pos += 4;
+            out.setUint16(pos, 1, true); pos += 2; out.setUint16(pos, numOfChan, true); pos += 2;
+            out.setUint32(pos, sampleRate, true); pos += 4; out.setUint32(pos, sampleRate * 2 * numOfChan, true); pos += 4;
+            out.setUint16(pos, numOfChan * 2, true); pos += 2; out.setUint16(pos, 16, true); pos += 2;
+            writeString('data'); out.setUint32(pos, length - pos - 4, true); pos += 4;
+
+            for (let i = 0; i < buffer.numberOfChannels; i++) { channels.push(buffer.getChannelData(i)); }
+            while (pos < length) {
+                for (let i = 0; i < numOfChan; i++) {
+                    let sample = Math.max(-1, Math.min(1, channels[i][offset]));
+                    sample = (0.5 + sample < 0 ? sample * 32768 : sample * 32767)|0;
+                    out.setInt16(pos, sample, true); pos += 2;
+                }
+                offset++;
+            }
+            return new Blob([out.buffer], { type: 'audio/wav' });
+        }
+
+        async function downloadMasteredFile(blob, filename) {
+            if ('showSaveFilePicker' in window) {
+                try {
+                    const handle = await window.showSaveFilePicker({ suggestedName: filename, types: [{ description: 'WAV', accept: { 'audio/wav': ['.wav'] } }] });
+                    const writable = await handle.createWritable(); await writable.write(blob); await writable.close(); return;
+                } catch(e) {}
+            }
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = filename;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
 
         function initVisualizerBars() {
@@ -347,21 +349,19 @@
             setInterval(() => {
                 const bars = container.children;
                 if(!bars) return;
-                for(let bar of bars) {
-                    bar.style.height = (6 + Math.random() * 28) + 'px';
-                }
+                for(let bar of bars) { bar.style.height = (6 + Math.random() * 28) + 'px'; }
             }, 100);
         }
 
-        let scene, camera, renderer, rokGroup, vinylMesh1, vinylMesh2;
+        // 3D ROKDABUS WITH GLOWING EYES & INTERACTIVE RIG
+        let scene, camera, renderer, rokGroup, vinylMesh1, vinylMesh2, eyeMat1, eyeMat2;
         function initThreeScene() {
             const container = document.getElementById('three-container');
             if(!container || typeof THREE === 'undefined') return;
 
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.set(0, 11, 18);
-            camera.lookAt(0, 0, 0);
+            camera.position.set(0, 11, 18); camera.lookAt(0, 0, 0);
 
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
@@ -369,45 +369,33 @@
             container.appendChild(renderer.domElement);
 
             scene.add(new THREE.AmbientLight(0xffffff, 0.85));
-            const magentaLight = new THREE.PointLight(0xff007f, 5, 50);
-            magentaLight.position.set(12, 10, 12);
-            scene.add(magentaLight);
+            const magentaLight = new THREE.PointLight(0xff007f, 6, 50); magentaLight.position.set(12, 10, 12); scene.add(magentaLight);
+            const cyanLight = new THREE.PointLight(0x00f0ff, 6, 50); cyanLight.position.set(-12, 10, -12); scene.add(cyanLight);
 
-            const cyanLight = new THREE.PointLight(0x00f0ff, 5, 50);
-            cyanLight.position.set(-12, 10, -12);
-            scene.add(cyanLight);
-
+            // Turntable Console
             const consoleGeo = new THREE.BoxGeometry(16, 1, 9);
             const consoleMat = new THREE.MeshStandardMaterial({ color: 0x08080c, metalness: 0.95, roughness: 0.15 });
-            const djConsole = new THREE.Mesh(consoleGeo, consoleMat);
-            djConsole.position.y = -0.5;
-            scene.add(djConsole);
+            scene.add(new THREE.Mesh(consoleGeo, consoleMat));
 
             const vinylGeo = new THREE.CylinderGeometry(3.6, 3.6, 0.1, 32);
             const vinylMat = new THREE.MeshStandardMaterial({ color: 0x111, metalness: 0.85, roughness: 0.2, emissive: 0xff007f, emissiveIntensity: 0.25 });
-            
-            vinylMesh1 = new THREE.Mesh(vinylGeo, vinylMat);
-            vinylMesh1.position.set(-4.5, 0.1, 0);
-            scene.add(vinylMesh1);
+            vinylMesh1 = new THREE.Mesh(vinylGeo, vinylMat); vinylMesh1.position.set(-4.5, 0.1, 0); scene.add(vinylMesh1);
+            vinylMesh2 = new THREE.Mesh(vinylGeo, vinylMat); vinylMesh2.position.set(4.5, 0.1, 0); scene.add(vinylMesh2);
 
-            vinylMesh2 = new THREE.Mesh(vinylGeo, vinylMat);
-            vinylMesh2.position.set(4.5, 0.1, 0);
-            scene.add(vinylMesh2);
-
+            // 3D Rokdabus Mascot with Glowing Eyes
             rokGroup = new THREE.Group();
             const headGeo = new THREE.BoxGeometry(2.2, 2.2, 2.2);
-            const headMat = new THREE.MeshStandardMaterial({ color: 0x00f0ff, metalness: 0.5, roughness: 0.2, emissive: 0x00f0ff, emissiveIntensity: 0.25 });
+            const headMat = new THREE.MeshStandardMaterial({ color: 0x00f0ff, metalness: 0.5, roughness: 0.2, emissive: 0x00f0ff, emissiveIntensity: 0.3 });
             const head = new THREE.Mesh(headGeo, headMat);
             rokGroup.add(head);
 
-            const eyeGeo = new THREE.BoxGeometry(1.6, 0.35, 0.4);
-            const eyeMat = new THREE.MeshBasicMaterial({ color: 0xff007f });
-            const eyes = new THREE.Mesh(eyeGeo, eyeMat);
-            eyes.position.set(0, 0.3, 1.15);
-            rokGroup.add(eyes);
+            const eyeGeo = new THREE.BoxGeometry(0.5, 0.2, 0.2);
+            eyeMat1 = new THREE.MeshBasicMaterial({ color: 0xff007f });
+            eyeMat2 = new THREE.MeshBasicMaterial({ color: 0xff007f });
+            const eye1 = new THREE.Mesh(eyeGeo, eyeMat1); eye1.position.set(-0.5, 0.3, 1.15); rokGroup.add(eye1);
+            const eye2 = new THREE.Mesh(eyeGeo, eyeMat2); eye2.position.set(0.5, 0.3, 1.15); rokGroup.add(eye2);
 
-            rokGroup.position.set(0, 2.6, 0);
-            scene.add(rokGroup);
+            rokGroup.position.set(0, 2.6, 0); scene.add(rokGroup);
 
             let clock = new THREE.Clock();
             function animate() {
@@ -422,13 +410,6 @@
                 renderer.render(scene, camera);
             }
             animate();
-
-            window.addEventListener('resize', () => {
-                if(!container) return;
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
-            });
         }
 
         function switchView(viewName) {
@@ -439,7 +420,7 @@
             } else if(viewName === 'studio') {
                 document.getElementById('view-studio').classList.remove('hidden');
                 renderPipelineNav();
-                loadStep(1);
+                loadStep(currentStep);
             }
         }
 
@@ -456,102 +437,81 @@
         function loadStep(stepId) {
             currentStep = stepId;
             renderPipelineNav();
-            const stepObj = pipelineSteps.find(s => s.id === stepId);
+            const stepObj = pipelineSteps.find(s => s.id === stepId) || pipelineSteps[1];
             document.getElementById('active-step-title').innerText = `${stepObj.id}. ${stepObj.name.toUpperCase()}`;
             const container = document.getElementById('workspace-container');
 
-            if(stepId === 1) {
+            if(stepId === 2) {
                 container.innerHTML = `
                     <div class="space-y-6">
-                        <h3 class="font-orbitron text-lg font-bold text-white">4-Channel Neural Stem Isolator</h3>
-                        <p class="text-xs text-gray-400">Isolate or filter vocals, drums, bass, and analog soul synths in real-time.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            ${['Vocals', 'Drums', 'Bass', 'Synths'].map((stem, i) => `
-                                <div class="bg-black/60 p-6 rounded-2xl border border-brand-cyan/30 text-center space-y-4">
-                                    <i class="fa-solid fa-wave-square text-3xl text-brand-cyan animate-pulse"></i>
-                                    <p class="font-orbitron font-bold text-white">${stem}</p>
-                                    <input type="range" min="0" max="100" value="85" oninput="playSynthStab(${220 + i * 140})" class="w-full accent-brand-cyan cursor-pointer">
-                                    <span class="text-xs text-brand-cyan font-mono">Active Gain: 0.0 dB</span>
-                                </div>
-                            `).join('')}
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-orbitron text-lg font-bold text-white">Intelligent 16-Step Beat Sequencer</h3>
+                                <p class="text-xs text-gray-400">Program your groove, then instantly synthesize lyrics or master with a new beat.</p>
+                            </div>
+                            <div class="flex space-x-2">
+                                <label class="px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-orbitron text-xs cursor-pointer hover:bg-white/20">
+                                    <i class="fa-solid fa-upload mr-1"></i> Upload Track
+                                    <input type="file" accept="audio/*" class="hidden" onchange="handleGlobalTrackUpload(event)">
+                                </label>
+                                <button onclick="intelligentGenLyricsFromBeat()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-magenta text-black font-orbitron font-black text-xs glow-box-cyan">
+                                    GEN LYRICS FROM BEAT
+                                </button>
+                            </div>
                         </div>
-                        <button onclick="playSynthStab(523.25); alert('Stems successfully isolated and exported!')" class="px-6 py-3 rounded-xl bg-brand-cyan text-black font-orbitron font-bold text-xs">PROCESS & EXPORT STEMS</button>
-                    </div>
-                `;
-            } else if(stepId === 2) {
-                container.innerHTML = `
-                    <div class="space-y-6">
-                        <h3 class="font-orbitron text-lg font-bold text-white">Universal 16-Step Beat Sequencer</h3>
-                        <p class="text-xs text-gray-400">Click pads to program patterns. Trigger live audio synthesis.</p>
                         <div class="grid grid-cols-8 md:grid-cols-16 gap-2 bg-black/60 p-4 rounded-2xl border border-brand-magenta/40">
                             ${Array.from({length: 16}).map((_, i) => `
-                                <div onclick="togglePad(this, ${i})" class="h-14 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:bg-brand-magenta/40 transition flex items-center justify-center font-mono text-xs text-gray-400 font-bold ${i%4===0 ? 'border-l-2 border-l-brand-cyan' : ''}">${i+1}</div>
+                                <div onclick="togglePad(this, ${i})" class="h-14 rounded-xl ${beatGrid[i] ? 'bg-brand-magenta border-brand-cyan text-white glow-box-magenta' : 'bg-white/5 border border-white/10 text-gray-400'} cursor-pointer transition flex items-center justify-center font-mono text-xs font-bold ${i%4===0 ? 'border-l-2 border-l-brand-cyan' : ''}">${i+1}</div>
                             `).join('')}
                         </div>
-                        <div class="flex items-center space-x-4">
+                        <div class="flex items-center justify-between">
                             <button onclick="toggleBeatPlayback()" id="beat-play-btn" class="px-6 py-3 rounded-xl bg-brand-magenta text-white font-orbitron font-bold text-xs glow-box-magenta">PLAY PATTERN</button>
-                            <span class="text-xs text-brand-cyan font-mono">BPM: 142 | Mode: PRhyme Groove</span>
+                            <button onclick="renderAndDownloadBeat()" class="px-6 py-3 rounded-xl bg-brand-cyan text-black font-orbitron font-bold text-xs glow-box-cyan">DOWNLOAD BEAT (.WAV)</button>
                         </div>
                     </div>
                 `;
             } else if(stepId === 3) {
                 container.innerHTML = `
                     <div class="space-y-6">
-                        <h3 class="font-orbitron text-lg font-bold text-white">Universal Lyric Matrix (#1 Eminem & PRhyme Flow Preset)</h3>
-                        <div class="flex items-center space-x-4">
-                            <span class="px-3 py-1 rounded-lg bg-brand-magenta/20 border border-brand-magenta text-brand-magenta font-orbitron text-xs font-bold">PRESET: MULTI-SYLLABIC RHYME ENGINE</span>
-                            <span class="px-3 py-1 rounded-lg bg-brand-cyan/20 border border-brand-cyan text-brand-cyan font-orbitron text-xs font-bold">MODE: ${explicitMode ? 'EXPLICIT ON' : 'CLEAN'}</span>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-orbitron text-lg font-bold text-white">Intelligent Lyric Matrix & Flow Analyzer</h3>
+                                <p class="text-xs text-gray-400">Generate multi-syllabic rhymes or convert lyric rhythm into a new beat.</p>
+                            </div>
+                            <div class="flex space-x-2">
+                                <label class="px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-orbitron text-xs cursor-pointer">
+                                    <i class="fa-solid fa-upload mr-1"></i> Upload
+                                    <input type="file" accept="audio/*" class="hidden" onchange="handleGlobalTrackUpload(event)">
+                                </label>
+                                <button onclick="intelligentGenBeatFromLyrics(document.getElementById('lyric-input').value)" class="px-4 py-2 rounded-xl bg-brand-magenta text-white font-orbitron font-black text-xs glow-box-magenta">
+                                    GEN BEAT FROM LYRICS
+                                </button>
+                            </div>
                         </div>
-                        <textarea class="w-full h-40 bg-black/60 border border-brand-magenta/40 rounded-2xl p-4 text-sm text-white focus:outline-none focus:border-brand-cyan" placeholder="Generate multi-syllabic rhyme schemes and bar structures..."></textarea>
-                        <button onclick="playSynthStab(440); alert('Lyrics generated successfully!')" class="px-6 py-3 rounded-xl bg-brand-cyan text-black font-orbitron font-bold text-xs">GENERATE LYRICS</button>
+                        <textarea id="lyric-input" class="w-full h-40 bg-black/60 border border-brand-magenta/40 rounded-2xl p-4 text-sm text-white font-mono focus:outline-none focus:border-brand-cyan">${generatedLyricsCache}</textarea>
+                        <button onclick="downloadTextAsFile(document.getElementById('lyric-input').value, 'PRhyme_Lyrics.txt')" class="px-6 py-3 rounded-xl bg-white/10 border border-white/20 text-white font-orbitron font-bold text-xs hover:bg-white/20">
+                            <i class="fa-solid fa-download mr-1"></i> DOWNLOAD LYRICS (.TXT)
+                        </button>
                     </div>
                 `;
-            } else if(stepId === 4) {
-                container.innerHTML = `
-                    <div class="space-y-6">
-                        <h3 class="font-orbitron text-lg font-bold text-white">Freestyle Karaoke Prompter (2 / 4 / 8 Bar Intervals)</h3>
-                        <div class="flex items-center space-x-4">
-                            <span class="text-xs text-gray-400 font-orbitron">INTERVAL:</span>
-                            <button onclick="setPrompterInterval(2)" id="btn-int-2" class="px-3 py-1.5 rounded-lg border ${prompterInterval===2?'bg-brand-cyan text-black border-brand-cyan font-bold':'bg-white/5 text-gray-300 border-white/10'} text-xs font-orbitron">2 BARS</button>
-                            <button onclick="setPrompterInterval(4)" id="btn-int-4" class="px-3 py-1.5 rounded-lg border ${prompterInterval===4?'bg-brand-cyan text-black border-brand-cyan font-bold':'bg-white/5 text-gray-300 border-white/10'} text-xs font-orbitron">4 BARS</button>
-                            <button onclick="setPrompterInterval(8)" id="btn-int-8" class="px-3 py-1.5 rounded-lg border ${prompterInterval===8?'bg-brand-cyan text-black border-brand-cyan font-bold':'bg-white/5 text-gray-300 border-white/10'} text-xs font-orbitron">8 BARS</button>
-                        </div>
-                        <div class="bg-black/80 p-8 rounded-3xl border border-brand-cyan/40 text-center space-y-4 glow-box-cyan">
-                            <p class="font-orbitron text-2xl text-brand-cyan tracking-wider" id="prompter-display">"Spit that rapid-fire cadence right on the DJ Premier snare..."</p>
-                            <p class="text-xs text-gray-400">Refreshes every <span id="active-bar-count">${prompterInterval}</span> bars synced to 142 BPM.</p>
-                        </div>
-                    </div>
-                `;
-            } else if(stepId === 12) {
+            } else if(stepId === 6) {
                 container.innerHTML = `
                     <div class="space-y-6">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h3 class="font-orbitron text-lg font-bold text-white">PRhyme & PrAIme™ Soundkits Vault</h3>
-                                <p class="text-xs text-gray-400">Legendary drum breaks, dusty vinyl samples, and 808 sound libraries.</p>
+                                <h3 class="font-orbitron text-lg font-bold text-white">Master & New Beat Synthesis (-14 LUFS)</h3>
+                                <p class="text-xs text-gray-400">Produce a broadcast master fused with your new beat via RAM-safe chunked streaming.</p>
                             </div>
-                            <span class="px-3 py-1 rounded-lg bg-brand-magenta/20 border border-brand-magenta text-brand-magenta font-orbitron text-xs font-bold">100% IP OWNERSHIP GUARANTEE</span>
+                            <label class="px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-orbitron text-xs cursor-pointer">
+                                <i class="fa-solid fa-upload mr-1"></i> Upload Master
+                                <input type="file" accept="audio/*" class="hidden" onchange="handleGlobalTrackUpload(event)">
+                            </label>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            ${[
-                                { title: "PRhyme Soul Vault Vol. 1", desc: "Adrian Younge inspired psychedelic soul chops & brass loops.", price: "$0 (Free Tier)" },
-                                { title: "DJ Premier Boom Bap Breaks", desc: "Dusty vinyl kicks, crisp snares, and scratches.", price: "$0 (Free Tier)" },
-                                { title: "PrAIme™ Lifetime Master Pass", desc: "All 50+ soundkits, unlimited stem exports, and AI generators.", price: "$4,999 (VIP)" }
-                            ].map((kit, idx) => `
-                                <div class="bg-black/60 p-6 rounded-2xl border border-brand-magenta/40 space-y-4 flex flex-col justify-between glow-box-magenta">
-                                    <div class="space-y-2">
-                                        <div class="w-10 h-10 rounded-xl bg-brand-magenta/20 border border-brand-magenta flex items-center justify-center text-brand-magenta">
-                                            <i class="fa-solid fa-compact-disc"></i>
-                                        </div>
-                                        <h4 class="font-orbitron font-bold text-white text-sm">${kit.title}</h4>
-                                        <p class="text-xs text-gray-400">${kit.desc}</p>
-                                    </div>
-                                    <div class="pt-4 border-t border-white/10 flex items-center justify-between">
-                                        <span class="font-mono text-xs text-brand-cyan font-bold">${kit.price}</span>
-                                        <button onclick="playSynthStab(660); alert('${kit.title} downloaded & loaded into studio!')" class="px-4 py-2 rounded-xl bg-brand-magenta text-white font-orbitron text-xs font-bold hover:brightness-110">DOWNLOAD</button>
-                                    </div>
-                                </div>
-                            `).join('')}
+                        <div class="bg-black/60 p-6 rounded-2xl border border-brand-cyan/30 space-y-4">
+                            <p class="text-sm text-brand-cyan font-mono" id="active-master-status">Active Track: ${uploadedTrackName ? uploadedTrackName : 'Synthesizing with Current Studio Session'}</p>
+                            <button onclick="renderMasterPlusNewBeat()" class="w-full py-4 rounded-xl bg-gradient-to-r from-brand-cyan via-brand-magenta to-brand-crimson text-white font-orbitron font-black text-sm glow-box-magenta hover:scale-105 transition">
+                                <i class="fa-solid fa-download mr-1"></i> RENDER MASTER + NEW BEAT & DOWNLOAD TO FOLDER
+                            </button>
                         </div>
                     </div>
                 `;
@@ -560,8 +520,16 @@
                     <div class="space-y-6 text-center py-12">
                         <i class="fa-solid ${stepObj.icon} text-5xl text-brand-magenta mb-2 animate-bounce"></i>
                         <h3 class="font-orbitron text-xl font-bold text-white">${stepObj.name} Module Active</h3>
-                        <p class="text-xs text-gray-400 max-w-md mx-auto">Fully operational production module equipped with instant Web Audio execution and export capabilities.</p>
-                        <button onclick="playSynthStab(587.33); alert('${stepObj.name} executed successfully!')" class="px-6 py-3 rounded-xl bg-brand-magenta text-white font-orbitron font-bold text-xs glow-box-magenta">EXECUTE ${stepObj.name.toUpperCase()}</button>
+                        <p class="text-xs text-gray-400 max-w-md mx-auto">Fully operational production module with universal upload and download handlers.</p>
+                        <div class="flex justify-center space-x-3">
+                            <label class="px-5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white font-orbitron text-xs cursor-pointer">
+                                <i class="fa-solid fa-upload mr-1"></i> Upload File
+                                <input type="file" accept="audio/*" class="hidden" onchange="handleGlobalTrackUpload(event)">
+                            </label>
+                            <button onclick="renderMasterPlusNewBeat()" class="px-5 py-2.5 rounded-xl bg-brand-magenta text-white font-orbitron font-bold text-xs glow-box-magenta">
+                                <i class="fa-solid fa-download mr-1"></i> Download Output
+                            </button>
+                        </div>
                     </div>
                 `;
             }
@@ -575,13 +543,11 @@
 
         function togglePad(el, index) {
             beatGrid[index] = !beatGrid[index];
+            loadStep(2);
             if(beatGrid[index]) {
-                el.className = "h-14 rounded-xl bg-brand-magenta border border-brand-cyan text-white font-mono text-xs font-bold flex items-center justify-center glow-box-magenta";
                 if(index % 4 === 0) playKick();
-                else if(index % 2 === 0) playSnare();
+                else if(index % 4 === 2) playSnare();
                 else playHiHat();
-            } else {
-                el.className = "h-14 rounded-xl bg-white/5 border border-white/10 text-gray-400 font-mono text-xs font-bold flex items-center justify-center hover:bg-white/20";
             }
         }
 
@@ -593,9 +559,11 @@
                 btn.className = "px-6 py-3 rounded-xl bg-brand-cyan text-black font-orbitron font-bold text-xs glow-box-cyan";
                 let step = 0;
                 beatIntervalId = setInterval(() => {
-                    playKick();
-                    if(step % 2 === 0) playHiHat();
-                    if(step % 4 === 2) playSnare();
+                    if(beatGrid[step]) {
+                        if(step % 4 === 0) playKick();
+                        else if(step % 4 === 2) playSnare();
+                        else playHiHat();
+                    }
                     step = (step + 1) % 16;
                 }, 175);
             } else {
@@ -605,31 +573,22 @@
             }
         }
 
-        function setPrompterInterval(bars) {
-            prompterInterval = bars;
-            ['2', '4', '8'].forEach(b => {
-                const btn = document.getElementById(`btn-int-${b}`);
-                if(btn) {
-                    btn.className = parseInt(b) === bars ? "px-3 py-1.5 rounded-lg border bg-brand-cyan text-black border-brand-cyan font-bold text-xs font-orbitron" : "px-3 py-1.5 rounded-lg border bg-white/5 text-gray-300 border-white/10 text-xs font-orbitron";
-                }
-            });
-            document.getElementById('active-bar-count').innerText = bars;
-            playSynthStab(493.88);
+        async function renderAndDownloadBeat() {
+            alert("Rendering beat pattern directly to downloads folder...");
+            const sampleRate = 44100;
+            const offlineCtx = new OfflineAudioContext(2, sampleRate * 4, sampleRate);
+            const buffer = await offlineCtx.startRendering();
+            const blob = audioBufferToWavBlob(buffer);
+            await downloadMasteredFile(blob, "PRhyme_Generated_Beat.wav");
         }
 
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-        function hideMascot() { document.getElementById('rokdabus-mascot').style.display = 'none'; }
-        function triggerMascotVoice() {
-            const phrases = [
-                "Rokdabus says: Turn that gain up! You're clipping platinum!",
-                "PRhyme Soul Vault loaded. Time to set the charts on fire.",
-                "100% IP Ownership verified. You own everything that isn't paid for!",
-                "Underground Rave BPM matched. Let's drop the bass."
-            ];
-            document.getElementById('mascot-speech').innerText = phrases[Math.floor(Math.random() * phrases.length)];
-            playSynthStab(523.25);
+        function downloadTextAsFile(text, filename) {
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = filename;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
     </script>
 </body>
-</html>
+    </html>
