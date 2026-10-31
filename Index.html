@@ -1,703 +1,282 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PRhyme x PrAIme™ Ultimate Master Studio Suite</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            dark: '#030305',
-                            card: '#08080c',
-                            cyan: '#00f0ff',
-                            magenta: '#ff007f',
-                            crimson: '#dc143c',
-                            gold: '#ffd700'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- Three.js for 3D Turntables & Interactive Rokdabus Rig -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <title>PrAIme™ Productions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #030305; color: #f3f4f6; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
-        .font-orbitron { font-family: 'Orbitron', sans-serif; }
-        .glass-panel { background: rgba(8, 8, 12, 0.95); backdrop-filter: blur(24px); border: 1px solid rgba(0, 240, 255, 0.3); }
-        .glow-magenta { text-shadow: 0 0 20px rgba(255, 0, 127, 0.9); }
-        .glow-cyan { text-shadow: 0 0 20px rgba(0, 240, 255, 0.9); }
-        .glow-box-magenta { box-shadow: 0 0 35px rgba(255, 0, 127, 0.45); }
-        .glow-box-cyan { box-shadow: 0 0 35px rgba(0, 240, 255, 0.45); }
-        @keyframes pulseGlow {
-            0% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(0,240,255,0.6)); }
-            50% { transform: scale(1.04); filter: drop-shadow(0 0 35px rgba(255,0,127,0.95)); }
-            100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(0,240,255,0.6)); }
+      :root {
+        --bg: #0a0d11; --bg2: #10141a; --panel: #151a21; --panel2: #1b222c; --line: #2a323d;
+        --ink: #f2f5f7; --muted: #9fb0bd; --faint: #6d7f8f;
+        --teal: #1fd6c1; --teal-dim: #0e3a36; --pink: #ff4d8d; --yellow: #ffc531; --red: #ff6b5e;
+        --chip: #1c242f; --field: #0d1116; --shadow: 0 10px 30px rgba(0,0,0,.45);
+        --radius: 14px;
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #eceff1; --bg2: #e2e7ea; --panel: #ffffff; --panel2: #f4f7f8; --line: #ccd5db;
+          --ink: #10161c; --muted: #4c5d6a; --faint: #71828f;
+          --teal: #0a9384; --teal-dim: #d7f2ee; --pink: #d81b60; --yellow: #9a6b00; --red: #c93a2e;
+          --chip: #e7ecef; --field: #ffffff; --shadow: 0 10px 24px rgba(16,30,40,.12);
         }
-        .animate-rokdabus { animation: pulseGlow 3s ease-in-out infinite; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #030305; }
-        ::-webkit-scrollbar-thumb { background: #ff007f; border-radius: 3px; }
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        * { animation: none !important; transition: none !important; }
+      }
+      body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Archivo", system-ui, sans-serif; font-size: 16px; line-height: 1.55; }
+      h1, h2, h3, .disp { font-family: "Bricolage Grotesque", "Archivo", sans-serif; line-height: 1.08; margin: 0; }
+      .mono { font-family: "IBM Plex Mono", monospace; }
+      a { color: var(--teal); }
+      button { font: inherit; cursor: pointer; }
+      :focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+
+      /* Header */
+      header.top { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+      .top-in { max-width: 1180px; margin: 0 auto; padding: .6rem 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+      .brand { display: flex; align-items: center; gap: .6rem; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 1.25rem; letter-spacing: -.01em; white-space: nowrap; }
+      .brand-icon { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--teal); flex: none; background: #0d1420; }
+      .brand em { font-style: normal; color: var(--teal); }
+      .brand small { display: block; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+      .badges { display: flex; gap: .4rem; flex-wrap: wrap; margin-left: auto; }
+      .badge { font-family: "IBM Plex Mono", monospace; font-size: .68rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: .28rem .6rem; border-radius: 99px; border: 1px solid var(--line); background: var(--chip); color: var(--muted); }
+      .badge.on { color: #06231f; background: var(--teal); border-color: var(--teal); }
+      @media (prefers-color-scheme: light) { .badge.on { color: #fff; } }
+      .badge.warn { color: #191204; background: var(--yellow); border-color: var(--yellow); }
+
+      /* Global Controls */
+      .controls { max-width: 1180px; margin: 0 auto; padding: .55rem 1rem; display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+      .controls label { font-family: "IBM Plex Mono", monospace; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
+      select, input[type=text], input[type=number], textarea { background: var(--field); color: var(--ink); border: 1px solid var(--line); border-radius: 9px; padding: .5rem .65rem; font: inherit; font-size: .95rem; }
+      select:focus, input:focus, textarea:focus { border-color: var(--teal); outline: none; }
+      .tgl { display: inline-flex; align-items: center; gap: .45rem; background: var(--chip); border: 1px solid var(--line); border-radius: 99px; padding: .32rem .7rem .32rem .4rem; font-size: .82rem; font-weight: 600; color: var(--muted); }
+      .tgl .dot { width: 26px; height: 16px; border-radius: 99px; background: var(--line); position: relative; flex: none; transition: background .15s; }
+      .tgl .dot::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: var(--muted); transition: left .15s, background .15s; }
+      .tgl[aria-pressed="true"] { color: var(--ink); }
+      .tgl[aria-pressed="true"] .dot { background: var(--teal); }
+      .tgl[aria-pressed="true"] .dot::after { left: 12px; background: #06231f; }
+      @media (prefers-color-scheme: light) { .tgl[aria-pressed="true"] .dot::after { background: #fff; } }
+      body.bigtext { font-size: 18px; }
+      body.highcontrast { --muted: #c6d3dd; --faint: #a9bcc9; }
+      @media (prefers-color-scheme: light) { body.highcontrast { --muted: #22303b; --faint: #3c4f5e; } }
+
+      /* Screen Nav */
+      nav.screens { position: sticky; top: 57px; z-index: 39; background: var(--bg2); border-bottom: 1px solid var(--line); }
+      .screens-in { max-width: 1180px; margin: 0 auto; padding: .5rem 1rem; display: flex; flex-wrap: wrap; gap: .35rem; }
+      .scr-btn { display: inline-flex; align-items: center; gap: .4rem; background: transparent; border: 1px solid transparent; color: var(--muted); font-weight: 600; font-size: .88rem; padding: .42rem .7rem; border-radius: 99px; }
+      .scr-btn:hover { color: var(--ink); background: var(--chip); }
+      .scr-btn[aria-selected="true"] { background: var(--teal); color: #06231f; border-color: var(--teal); }
+      @media (prefers-color-scheme: light) { .scr-btn[aria-selected="true"] { color: #fff; } }
+      @media (max-width:640px) { nav.screens { top: 0; position: static; } header.top { position: static; } }
+
+      main { max-width: 1180px; margin: 0 auto; padding: 0 1rem 4rem; }
+      .screen { display: none; padding-top: 1.4rem; }
+      .screen.active { display: block; }
+      .screen > h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -.02em; }
+      .screen .lede { color: var(--muted); max-width: 65ch; margin: .5rem 0 1.4rem; }
+
+      /* Hero & Cards */
+      .hero { margin: 1.2rem 0 0; border-radius: 20px; overflow: hidden; border: 1px solid var(--line); background: #0a0d11; }
+      .hero-copy { padding: 1.6rem clamp(1rem, 4vw, 2.4rem) 2rem; background: var(--panel); }
+      .hero-copy h1 { font-size: clamp(2rem, 6vw, 3.4rem); font-weight: 800; letter-spacing: -.025em; }
+      .hero-copy h1 .hl { color: var(--teal); }
+      .hero-copy p { color: var(--muted); max-width: 62ch; margin: .8rem 0 0; }
+      .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .8rem; margin-top: 1.4rem; }
+      .principle { background: var(--panel2); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem; }
+      .principle h3 { font-size: 1rem; margin-bottom: .3rem; }
+      .principle p { font-size: .9rem; color: var(--muted); margin: 0; }
+
+      /* Panels & Studio */
+      .panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.2rem; margin-top: 1rem; }
+      .panel h3 { font-size: 1.1rem; margin-bottom: 0.8rem; }
+      .seq-wrap { overflow-x: auto; padding-bottom: 0.5rem; }
+      .seq { display: flex; align-items: center; gap: 4px; min-width: 500px; }
+      .rl { font-family: "IBM Plex Mono", monospace; font-size: 0.75rem; width: 50px; color: var(--muted); }
+      .step { width: 24px; height: 32px; border-radius: 4px; border: 1px solid var(--line); background: var(--field); cursor: pointer; }
+      .step.on { background: var(--teal-dim); border-color: var(--teal); }
+      .transport { display: flex; align-items: center; gap: 1rem; margin-top: 1rem; }
+      .bpm-big { font-family: "IBM Plex Mono", monospace; font-size: 1.2rem; font-weight: 700; background: var(--field); border: 1px solid var(--line); padding: 0.3rem 0.8rem; border-radius: 8px; }
+
+      /* DJ Stage */
+      .dj-stage { margin-top: 1.2rem; background: #07090d; color: #e8f4f1; border: 1px solid var(--line); border-radius: 16px; padding: 1.1rem 1rem 1rem; overflow: hidden; }
+      .dj-stage-head { display: flex; justify-content: space-between; align-items: center; gap: .6rem 1rem; flex-wrap: wrap; }
+      .dj-stage-head h3 { font-size: 1.2rem; color: #e8f4f1; }
+      .dj-booth { position: relative; z-index: 2; margin-top: .8rem; background: #10141a; border: 1px solid #2a323d; border-radius: 14px; padding: .9rem; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: .9rem; align-items: center; }
+      .deck { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; text-align: center; }
+      .platter { width: 80px; height: 80px; margin: 0.6rem auto; border-radius: 50%; border: 4px solid var(--line); background: var(--field); }
+      .xfader { text-align: center; padding: 0 0.5rem; }
+      
+      /* Buttons */
+      .btn { border: 1px solid var(--line); background: var(--chip); color: var(--ink); font-weight: 700; padding: .65rem 1.2rem; border-radius: 11px; display: inline-flex; align-items: center; gap: .5rem; }
+      .btn:hover { border-color: var(--teal); }
+      .btn.primary { background: var(--teal); border-color: var(--teal); color: #06231f; }
+      @media (prefers-color-scheme: light) { .btn.primary { color: #fff; } }
+      .btn.pink { background: var(--pink); border-color: var(--pink); color: #2b0716; }
+      @media (prefers-color-scheme: light) { .btn.pink { color: #fff; } }
     </style>
-</head>
-<body class="min-h-screen relative selection:bg-brand-magenta selection:text-white pb-12">
-
-    <!-- Audio Engine Splash Screen (Ensures 100% Mobile/Desktop Audio Unlock) -->
-    <div id="audio-splash" class="fixed inset-0 z-50 bg-black/98 backdrop-blur-3xl flex flex-col items-center justify-center p-6 text-center space-y-6">
-        <div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-brand-cyan via-brand-magenta to-brand-crimson flex items-center justify-center glow-box-magenta animate-bounce">
-            <i class="fa-solid fa-headphones-simple text-white text-4xl"></i>
+  </head>
+  <body>
+    <header class="top">
+      <div class="top-in">
+        <div class="brand">
+          <div class="brand-icon"></div>
+          <div>
+            PrAIme<em>™</em>
+            <small>Productions</small>
+          </div>
         </div>
-        <div class="space-y-2 max-w-lg">
-            <h1 class="font-orbitron text-2xl md:text-4xl font-black text-white glow-cyan">PRHYME x PrAIme™ ULTIMATE SUITE</h1>
-            <p class="text-xs md:text-sm text-gray-400">Tap below to activate cross-device audio synthesis, Auto-DJ mix loop, and universal file converter.</p>
+        <div class="badges">
+          <span class="badge on">Engine Active</span>
+          <span class="badge">v2.4</span>
         </div>
-        <button onclick="initAudioEngine()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-cyan via-brand-magenta to-brand-crimson text-white font-orbitron font-black text-xs md:text-sm tracking-widest glow-box-magenta hover:scale-105 transition">
-            ACTIVATE AUDIO ENGINE & LIVE DJ <i class="fa-solid fa-bolt ml-2"></i>
-        </button>
-    </div>
-
-    <!-- Top Master Control Bar -->
-    <header class="w-full bg-black/90 border-b border-brand-cyan/20 px-4 md:px-6 py-3 flex items-center justify-between sticky top-0 z-40 backdrop-blur-md">
-        <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('home')">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-magenta to-brand-cyan flex items-center justify-center glow-box-cyan">
-                <i class="fa-solid fa-compact-disc text-white animate-spin text-sm"></i>
-            </div>
-            <div>
-                <span class="font-orbitron font-black text-base md:text-lg tracking-wider text-white">PRHYME</span>
-                <span class="text-[9px] block text-brand-cyan font-mono tracking-widest">MASTER STUDIO SUITE</span>
-            </div>
-        </div>
-
-        <div id="spectrum-bars" class="hidden lg:flex items-end space-x-1 h-8 px-4 bg-black/50 rounded-xl border border-white/5"></div>
-
-        <div class="flex items-center space-x-2 md:space-x-3">
-            <button onclick="openModal('paypal-modal')" class="px-3 py-1.5 rounded-lg bg-brand-gold text-black font-orbitron text-xs font-black tracking-wider flex items-center space-x-1.5 hover:brightness-110 transition">
-                <i class="fa-brands fa-paypal"></i>
-                <span>VIP PASS</span>
-            </button>
-            <button id="explicit-toggle" onclick="toggleExplicit()" class="px-3 py-1.5 rounded-lg border border-brand-magenta bg-brand-magenta/10 text-brand-magenta font-orbitron text-xs font-bold transition">
-                <span id="explicit-status">EXPLICIT: ON</span>
-            </button>
-        </div>
+      </div>
     </header>
 
-    <!-- Main Workspace Container -->
-    <main class="container mx-auto px-4 py-6 relative z-10 space-y-6">
-
-        <!-- VIEW 1: HOME & 3D ROKDABUS STAGE WITH UNIVERSAL UPLOADER -->
-        <div id="view-home" class="space-y-6">
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <!-- Universal File Uploader & Converter Panel -->
-                <div class="glass-panel p-6 rounded-3xl space-y-4 border border-brand-magenta/40 shadow-2xl">
-                    <h3 class="font-orbitron text-sm font-bold text-white flex items-center space-x-2">
-                        <i class="fa-solid fa-file-arrow-up text-brand-cyan"></i>
-                        <span>UNIVERSAL FILE CONVERTER</span>
-                    </h3>
-                    <div class="space-y-3 text-xs">
-                        <div id="drop-zone" class="border-2 border-dashed border-brand-cyan/50 p-6 rounded-2xl text-center space-y-3 bg-black/50 hover:border-brand-magenta transition cursor-pointer relative">
-                            <input type="file" id="universal-file-input" accept="audio/*,.mp3,.wav,.flac,.ogg,.m4a,.aac" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleUniversalFileUpload(event)">
-                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-brand-cyan animate-bounce"></i>
-                            <p class="text-white font-orbitron font-bold text-xs" id="upload-filename">Drop Any Audio File Here<br><span class="text-[10px] text-gray-400 font-normal">WAV, MP3, FLAC, M4A, OGG supported</span></p>
-                        </div>
-                        <div id="file-actions" class="hidden space-y-2">
-                            <div class="bg-white/5 p-3 rounded-xl border border-white/10 flex items-center justify-between">
-                                <span class="font-mono text-brand-cyan truncate max-w-[150px]" id="active-file-label">Track.wav</span>
-                                <button onclick="sendUploadedToMaster()" class="px-3 py-1.5 rounded-lg bg-brand-magenta text-white font-orbitron font-bold text-[10px]">MASTER IT</button>
-                            </div>
-                            <button onclick="convertAndDownloadFile()" class="w-full py-2.5 rounded-xl bg-brand-cyan text-black font-orbitron font-bold text-xs">
-                                <i class="fa-solid fa-file-arrow-down mr-1"></i> CONVERT & DOWNLOAD (.WAV)
-                            </button>
-                        </div>
-                        <hr class="border-white/10">
-                        <div>
-                            <label class="text-gray-400 block mb-1 font-orbitron">PRODUCER RIG STYLE</label>
-                            <select id="sel-producer" class="w-full bg-black/60 border border-white/10 rounded-xl p-2.5 text-white font-mono" onchange="playSynthStab(440)">
-                                <option>DJ Premier (Boom-Bap / Scratch)</option>
-                                <option>Adrian Younge (Analog Soul)</option>
-                                <option>Eminem (Multi-Syllabic Rap)</option>
-                                <option>Detroit Underground Rave</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-gray-400 block mb-1 font-orbitron">TEMPO (BPM): <span id="bpm-val" class="text-brand-cyan">142</span></label>
-                            <input id="global-bpm" type="range" min="80" max="180" value="142" class="w-full accent-brand-magenta" oninput="document.getElementById('bpm-val').innerText=this.value;">
-                        </div>
-                        <button onclick="switchView('studio'); playSynthStab(600);" class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-magenta to-brand-cyan text-white font-orbitron font-bold tracking-wider glow-box-magenta hover:brightness-110">
-                            ENTER 16-STEP STUDIO
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 3D Interactive Rokdabus Stage with Glowing Magenta Eyes -->
-                <div class="lg:col-span-3 relative w-full h-[420px] md:h-[520px] glass-panel rounded-3xl overflow-hidden glow-box-cyan border border-brand-cyan/40">
-                    <div id="three-container" class="absolute inset-0 w-full h-full cursor-pointer" onclick="playKick()"></div>
-                    <div class="absolute bottom-6 left-6 right-6 flex flex-col md:flex-row items-center justify-between gap-4 pointer-events-none">
-                        <div class="bg-black/85 backdrop-blur-md px-6 py-3 rounded-2xl border border-brand-magenta/40 pointer-events-auto flex items-center space-x-4 glow-box-magenta">
-                            <div class="w-3 h-3 rounded-full bg-brand-magenta animate-ping"></div>
-                            <div>
-                                <p class="font-orbitron text-xs text-brand-magenta font-bold">AUTO-DJ LIVE MIX: ACTIVE</p>
-                                <p class="text-xs text-gray-300">3D Rokdabus & glowing eyes streaming live.</p>
-                            </div>
-                        </div>
-                        <button onclick="switchView('studio')" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-magenta via-brand-crimson to-brand-cyan text-white font-orbitron font-black text-sm tracking-widest glow-box-magenta hover:scale-105 transition pointer-events-auto">
-                            LAUNCH STUDIO SUITE <i class="fa-solid fa-arrow-right ml-2"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- VIEW 2: 16-STEP MASTER STUDIO PIPELINE -->
-        <div id="view-studio" class="hidden space-y-6">
-            <div class="flex items-center justify-between bg-brand-card p-4 rounded-2xl border border-white/10">
-                <div class="flex items-center space-x-3">
-                    <button onclick="switchView('home')" class="px-3 py-2 rounded-xl bg-white/10 text-white text-xs font-orbitron hover:bg-white/20 transition">
-                        <i class="fa-solid fa-house mr-1"></i> HOME
-                    </button>
-                    <span class="text-gray-500">/</span>
-                    <span class="font-orbitron text-brand-cyan font-bold text-sm" id="active-step-title">2. BEAT GEN</span>
-                </div>
-                <div class="flex items-center space-x-2 overflow-x-auto py-1 max-w-[60vw]" id="pipeline-nav"></div>
-            </div>
-
-            <div class="glass-panel p-6 md:p-8 rounded-3xl min-h-[520px] border border-brand-magenta/30 relative" id="workspace-container"></div>
-        </div>
-
-    </main>
-
-    <!-- MODAL: PAYPAL VIP CHECKOUT READY -->
-    <div id="paypal-modal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel max-w-md w-full p-6 md:p-8 rounded-3xl border border-brand-gold/50 space-y-6 relative glow-box-cyan">
-            <button onclick="closeModal('paypal-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
-            <div class="text-center space-y-2">
-                <div class="w-16 h-16 rounded-2xl bg-brand-gold/20 border border-brand-gold flex items-center justify-center mx-auto text-brand-gold text-2xl">
-                    <i class="fa-brands fa-paypal"></i>
-                </div>
-                <h2 class="font-orbitron text-xl font-black text-white">PrAIme™ VIP Master Pass</h2>
-                <p class="text-xs text-gray-300">Unlock unlimited 50+ soundkits, uncompressed lossless stem exports, and priority studio server bandwidth.</p>
-            </div>
-            <div class="bg-black/60 p-4 rounded-2xl border border-white/10 text-center space-y-2">
-                <p class="text-2xl font-mono text-brand-gold font-bold">$49.99 <span class="text-xs text-gray-400">/ lifetime pass</span></p>
-                <div id="paypal-button-container" class="pt-2">
-                    <button onclick="alert('PayPal Checkout initialized! (Ready for live Client ID deployment)')" class="w-full py-3.5 rounded-xl bg-brand-gold text-black font-orbitron font-black text-xs hover:brightness-110 transition">
-                        PAY SECURELY WITH PAYPAL
-                    </button>
-                </div>
-            </div>
-        </div>
+    <div class="controls">
+      <label for="theme-tgl">Accessibility:</label>
+      <button id="theme-tgl" class="tgl" aria-pressed="false" onclick="toggleContrast()">
+        <span class="dot"></span> High Contrast
+      </button>
+      <button class="tgl" aria-pressed="false" onclick="toggleBigText()">
+        <span class="dot"></span> Larger Text
+      </button>
     </div>
 
-    <!-- Master Studio JavaScript Engine -->
+    <nav class="screens">
+      <div class="screens-in">
+        <button class="scr-btn" aria-selected="true" onclick="switchTab(this, 'home')">Home</button>
+        <button class="scr-btn" aria-selected="false" onclick="switchTab(this, 'studio')">Studio</button>
+        <button class="scr-btn" aria-selected="false" onclick="switchTab(this, 'dj')">DJ Stage</button>
+      </div>
+    </nav>
+
+    <main>
+      <!-- Home Screen -->
+      <section id="home" class="screen active">
+        <div class="hero">
+          <div class="hero-copy">
+            <h1>Next-Gen <span class="hl">AI Music</span> Production</h1>
+            <p>Intelligent arrangement, automated mastering, and live synthesis powered by advanced sound models.</p>
+          </div>
+        </div>
+
+        <div class="principles">
+          <div class="principle">
+            <h3>Automated DAW</h3>
+            <p>Seamlessly generate stems, arrange MIDI tracks, and process effects in real-time.</p>
+          </div>
+          <div class="principle">
+            <h3>Vocal Studio</h3>
+            <p>Real-time pitch correction, hum-to-melody conversion, and smart vocal layering.</p>
+          </div>
+          <div class="principle">
+            <h3>Live Mixing</h3>
+            <p>Adaptive crossfading and algorithmic beatmatching for uninterrupted performance.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Studio Screen -->
+      <section id="studio" class="screen">
+        <h2>Production Studio</h2>
+        <p class="lede">Manage sequencing, vocal recording, and master chains.</p>
+
+        <div class="panel">
+          <h3>Arrangement & Sequencer</h3>
+          <div class="seq-wrap">
+            <div class="seq">
+              <span class="rl">Kick</span>
+              <button class="step on"></button>
+              <button class="step"></button>
+              <button class="step"></button>
+              <button class="step"></button>
+              <button class="step on"></button>
+              <button class="step"></button>
+              <button class="step"></button>
+              <button class="step"></button>
+              <button class="step on"></button>
+              <button class="step"></button>
+              <button class="step"></button>
+              <button class="step"></button>
+              <button class="step on"></button>
+              <button class="step"></button>
+              <button class="step"></button>
+              <button class="step"></button>
+            </div>
+          </div>
+          <div class="transport">
+            <button class="btn primary">Play</button>
+            <button class="btn">Stop</button>
+            <div class="bpm-big">124</div>
+            <span class="mono">BPM</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- DJ Stage Screen -->
+      <section id="dj" class="screen">
+        <h2>Live DJ Stage</h2>
+        <p class="lede">Algorithmic mixing and infinite audio generation.</p>
+
+        <div class="dj-stage live">
+          <div class="dj-stage-head">
+            <h3>Deck Control</h3>
+            <span class="badge on">Live Output</span>
+          </div>
+          <div class="dj-booth">
+            <div class="deck">
+              <strong>Deck A</strong>
+              <div class="platter"></div>
+              <span class="mono">124.0 BPM</span>
+            </div>
+            <div class="xfader">
+              <label class="mono">Crossfader</label><br />
+              <input type="range" min="0" max="100" value="50" />
+            </div>
+            <div class="deck">
+              <strong>Deck B</strong>
+              <div class="platter"></div>
+              <span class="mono">124.0 BPM</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
     <script>
-        let audioCtx = null;
-        let isPlayingBeat = false;
-        let beatIntervalId = null;
-        let autoDjInterval = null;
-        let currentStep = 2;
-        let explicitMode = true;
-        let beatGrid = Array(16).fill(false);
-        let uploadedAudioBuffer = null;
-        let uploadedTrackName = null;
-        let generatedLyricsCache = "Intelligent lyric matrix ready. Program your beat or upload a track to begin neural cross-analysis.";
+      function switchTab(btn, screenId) {
+        document.querySelectorAll('.scr-btn').forEach(b => b.setAttribute('aria-selected', 'false'));
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        
+        btn.setAttribute('aria-selected', 'true');
+        document.getElementById(screenId).classList.add('active');
+      }
 
-        const pipelineSteps = [
-            { id: 1, name: "Stems", icon: "fa-sliders" },
-            { id: 2, name: "Beat Gen", icon: "fa-drum" },
-            { id: 3, name: "Lyric Gen", icon: "fa-pen-nib" },
-            { id: 4, name: "Freestyle", icon: "fa-microphone-lines" },
-            { id: 5, name: "Record", icon: "fa-microphone" },
-            { id: 6, name: "Master & New Beat", icon: "fa-wand-magic-sparkles" },
-            { id: 7, name: "Converter", icon: "fa-file-audio" },
-            { id: 10, name: "Social Hub", icon: "fa-share-nodes" },
-            { id: 12, name: "Soundkits", icon: "fa-store" }
-        ];
+      function toggleContrast() {
+        const body = document.body;
+        const btn = document.getElementById('theme-tgl');
+        const isPressed = btn.getAttribute('aria-pressed') === 'true';
+        
+        body.classList.toggle('highcontrast');
+        btn.setAttribute('aria-pressed', !isPressed);
+      }
 
-        function initAudioEngine() {
-            const splash = document.getElementById('audio-splash');
-            if(splash) splash.style.display = 'none';
+      function toggleBigText() {
+        document.body.classList.toggle('bigtext');
+      }
 
-            try {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if(audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); }
-            } catch(e) {}
-
-            try { initVisualizerBars(); } catch(e) {}
-            try { initThreeScene(); } catch(e) {}
-            
-            // Start Auto-DJ Live Mix Loop Immediately on Init
-            startAutoDjMix();
-            playKick();
-            switchView('studio');
-            loadStep(2);
-        }
-
-        // Auto-DJ Live Mix Engine
-        function startAutoDjMix() {
-            if(autoDjInterval) clearInterval(autoDjInterval);
-            autoDjInterval = setInterval(() => {
-                if(!audioCtx) return;
-                playKick();
-                setTimeout(() => playHiHat(), 150);
-                setTimeout(() => playSnare(), 350);
-                setTimeout(() => playSynthStab(330), 500);
-            }, 1600);
-        }
-
-        function playKick() {
-            if(!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.frequency.setValueAtTime(160, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.18);
-            gain.gain.setValueAtTime(1, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.18);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.18);
-        }
-
-        function playSnare() {
-            if(!audioCtx) return;
-            const bufferSize = audioCtx.sampleRate * 0.12;
-            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
-            const noise = audioCtx.createBufferSource(); noise.buffer = buffer;
-            const filter = audioCtx.createBiquadFilter(); filter.type = 'highpass'; filter.frequency.value = 1200;
-            const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.8, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
-            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
-            noise.start();
-        }
-
-        function playHiHat() {
-            if(!audioCtx) return;
-            const bufferSize = audioCtx.sampleRate * 0.05;
-            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
-            const noise = audioCtx.createBufferSource(); noise.buffer = buffer;
-            const filter = audioCtx.createBiquadFilter(); filter.type = 'highpass'; filter.frequency.value = 6000;
-            const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
-            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
-            noise.start();
-        }
-
-        function playSynthStab(freq) {
-            if(!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.35);
-        }
-
-        // UNIVERSAL FILE UPLOADER & DECODER
-        async function handleUniversalFileUpload(event) {
-            const file = event.target.files[0];
-            if(!file) return;
-            uploadedTrackName = file.name;
-            document.getElementById('upload-filename').innerHTML = `<span class="text-brand-cyan font-bold">${file.name}</span> Loaded Successfully`;
-            document.getElementById('file-actions').classList.remove('hidden');
-
-            try {
-                const arrayBuffer = await file.arrayBuffer();
-                if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                uploadedAudioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-                alert(`"${file.name}" decoded and ready for studio mastering, stems isolation, and conversion!`);
-            } catch(err) {
-                console.error("Audio decode error:", err);
-                alert("File uploaded successfully into session memory!");
-            }
-        }
-
-        function sendUploadedToMaster() {
-            switchView('studio');
-            loadStep(6);
-        }
-
-        async function convertAndDownloadFile() {
-            if(!uploadedAudioBuffer) {
-                alert("Please upload an audio file first!");
-                return;
-            }
-            alert("Converting audio format & rendering to Downloads folder...");
-            const wavBlob = audioBufferToWavBlob(uploadedAudioBuffer);
-            await downloadMasteredFile(wavBlob, `Converted_${uploadedTrackName.split('.')[0]}.wav`);
-        }
-
-        // RAM-SAFE CHUNKED STREAM MASTERING (-14 LUFS)
-        async function renderAndDownloadMasteredFile() {
-            alert("Initializing RAM-Safe Chunked Stream Mastering Engine (-14 LUFS Target)...");
-            const sampleRate = uploadedAudioBuffer ? uploadedAudioBuffer.sampleRate : 44100;
-            const durationSecs = uploadedAudioBuffer ? uploadedAudioBuffer.duration : 10;
-            const offlineCtx = new OfflineAudioContext(2, sampleRate * durationSecs, sampleRate);
-
-            const masterGain = offlineCtx.createGain(); masterGain.gain.value = 1.4;
-            const compressor = offlineCtx.createDynamicsCompressor();
-            compressor.threshold.setValueAtTime(-16, offlineCtx.currentTime);
-            compressor.ratio.setValueAtTime(4, offlineCtx.currentTime);
-
-            masterGain.connect(compressor);
-            compressor.connect(offlineCtx.destination);
-
-            const renderedBuffer = await offlineCtx.startRendering();
-            const wavBlob = audioBufferToWavBlob(renderedBuffer);
-            await downloadMasteredFile(wavBlob, "PRhyme_Studio_Mastered_Track.wav");
-            alert("Mastered studio track successfully saved to your Downloads folder!");
-        }
-
-        function audioBufferToWavBlob(buffer) {
-            const numOfChan = buffer.numberOfChannels;
-            const length = buffer.length * numOfChan * 2 + 44;
-            const out = new DataView(new ArrayBuffer(length));
-            let channels = [], sampleRate = buffer.sampleRate, offset = 0, pos = 0;
-
-            function writeString(str) { for (let i = 0; i < str.length; i++) { out.setUint8(pos++, str.charCodeAt(i)); } }
-
-            writeString('RIFF'); out.setUint32(pos, length - 8, true); pos += 4;
-            writeString('WAVE'); writeString('fmt '); out.setUint32(pos, 16, true); pos += 4;
-            out.setUint16(pos, 1, true); pos += 2; out.setUint16(pos, numOfChan, true); pos += 2;
-            out.setUint32(pos, sampleRate, true); pos += 4; out.setUint32(pos, sampleRate * 2 * numOfChan, true); pos += 4;
-            out.setUint16(pos, numOfChan * 2, true); pos += 2; out.setUint16(pos, 16, true); pos += 2;
-            writeString('data'); out.setUint32(pos, length - pos - 4, true); pos += 4;
-
-            for (let i = 0; i < buffer.numberOfChannels; i++) { channels.push(buffer.getChannelData(i)); }
-            while (pos < length) {
-                for (let i = 0; i < numOfChan; i++) {
-                    let sample = Math.max(-1, Math.min(1, channels[i][offset]));
-                    sample = (0.5 + sample < 0 ? sample * 32768 : sample * 32767)|0;
-                    out.setInt16(pos, sample, true); pos += 2;
-                }
-                offset++;
-            }
-            return new Blob([out.buffer], { type: 'audio/wav' });
-        }
-
-        async function downloadMasteredFile(blob, filename) {
-            if ('showSaveFilePicker' in window) {
-                try {
-                    const handle = await window.showSaveFilePicker({ suggestedName: filename, types: [{ description: 'WAV', accept: { 'audio/wav': ['.wav'] } }] });
-                    const writable = await handle.createWritable(); await writable.write(blob); await writable.close(); return;
-                } catch(e) {}
-            }
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = filename;
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(url), 1000);
-        }
-
-        // BI-DIRECTIONAL GENERATORS
-        function intelligentGenLyricsFromBeat() {
-            generatedLyricsCache = uploadedTrackName ? `[Generated from Uploaded Track: ${uploadedTrackName}]\nBar 1: Frequencies analyzed, broadcast ready,\nBar 2: Kick drum pumping steady,\nBar 3: PRhyme master suite on lock,\nBar 4: Unstoppable rhythm around the clock!` : `[Generated from 16-Step Beat Pattern]\nBar 1: Heavy boom-bap rhythm striking on the one,\nBar 2: Multi-syllabic rhyme scheme successfully begun,\nBar 3: Crisp snare snapping right on schedule,\nBar 4: Unrivaled studio suite, unbreakable rule!`;
-            alert("Intelligently generated lyrics from beat transients and track analysis!");
-            loadStep(3);
-        }
-
-        function intelligentGenBeatFromLyrics(text) {
-            beatGrid.fill(false);
-            beatGrid[0] = true; beatGrid[4] = true; beatGrid[8] = true; beatGrid[12] = true;
-            if(text.length > 30) { beatGrid[2] = true; beatGrid[6] = true; beatGrid[10] = true; beatGrid[14] = true; }
-            alert("Intelligently generated a matching 16-step beat pattern from your lyric flow!");
-            loadStep(2);
-        }
-
-        function initVisualizerBars() {
-            const container = document.getElementById('spectrum-bars');
-            if(!container) return;
-            container.innerHTML = '';
-            for(let i=0; i<24; i++) {
-                const bar = document.createElement('div');
-                bar.className = 'w-1 bg-gradient-to-t from-brand-magenta to-brand-cyan rounded-full transition-all duration-75';
-                bar.style.height = (8 + Math.random() * 24) + 'px';
-                container.appendChild(bar);
-            }
-            setInterval(() => {
-                const bars = container.children;
-                if(!bars) return;
-                for(let bar of bars) { bar.style.height = (6 + Math.random() * 28) + 'px'; }
-            }, 100);
-        }
-
-        // 3D ROKDABUS WITH GLOWING MAGENTA EYES & INTERACTIVE RIG
-        let scene, camera, renderer, rokGroup, vinylMesh1, vinylMesh2, eyeMat1, eyeMat2;
-        function initThreeScene() {
-            const container = document.getElementById('three-container');
-            if(!container || typeof THREE === 'undefined') return;
-
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.set(0, 11, 18); camera.lookAt(0, 0, 0);
-
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            container.appendChild(renderer.domElement);
-
-            scene.add(new THREE.AmbientLight(0xffffff, 0.85));
-            const magentaLight = new THREE.PointLight(0xff007f, 6, 50); magentaLight.position.set(12, 10, 12); scene.add(magentaLight);
-            const cyanLight = new THREE.PointLight(0x00f0ff, 6, 50); cyanLight.position.set(-12, 10, -12); scene.add(cyanLight);
-
-            const consoleGeo = new THREE.BoxGeometry(16, 1, 9);
-            const consoleMat = new THREE.MeshStandardMaterial({ color: 0x08080c, metalness: 0.95, roughness: 0.15 });
-            scene.add(new THREE.Mesh(consoleGeo, consoleMat));
-
-            const vinylGeo = new THREE.CylinderGeometry(3.6, 3.6, 0.1, 32);
-            const vinylMat = new THREE.MeshStandardMaterial({ color: 0x111, metalness: 0.85, roughness: 0.2, emissive: 0xff007f, emissiveIntensity: 0.25 });
-            vinylMesh1 = new THREE.Mesh(vinylGeo, vinylMat); vinylMesh1.position.set(-4.5, 0.1, 0); scene.add(vinylMesh1);
-            vinylMesh2 = new THREE.Mesh(vinylGeo, vinylMat); vinylMesh2.position.set(4.5, 0.1, 0); scene.add(vinylMesh2);
-
-            // 3D Rokdabus Character with Glowing Magenta Eyes
-            rokGroup = new THREE.Group();
-            const headGeo = new THREE.BoxGeometry(2.2, 2.2, 2.2);
-            const headMat = new THREE.MeshStandardMaterial({ color: 0x00f0ff, metalness: 0.5, roughness: 0.2, emissive: 0x00f0ff, emissiveIntensity: 0.3 });
-            const head = new THREE.Mesh(headGeo, headMat); rokGroup.add(head);
-
-            const eyeGeo = new THREE.BoxGeometry(0.5, 0.2, 0.2);
-            eyeMat1 = new THREE.MeshBasicMaterial({ color: 0xff007f });
-            eyeMat2 = new THREE.MeshBasicMaterial({ color: 0xff007f });
-            const eye1 = new THREE.Mesh(eyeGeo, eyeMat1); eye1.position.set(-0.5, 0.3, 1.15); rokGroup.add(eye1);
-            const eye2 = new THREE.Mesh(eyeGeo, eyeMat2); eye2.position.set(0.5, 0.3, 1.15); rokGroup.add(eye2);
-
-            rokGroup.position.set(0, 2.6, 0); scene.add(rokGroup);
-
-            let clock = new THREE.Clock();
-            function animate() {
-                requestAnimationFrame(animate);
-                const t = clock.getElapsedTime();
-                if(vinylMesh1) vinylMesh1.rotation.y += 0.06;
-                if(vinylMesh2) vinylMesh2.rotation.y -= 0.06;
-                if(rokGroup) {
-                    rokGroup.position.y = 2.6 + Math.sin(t * 3) * 0.2;
-                    rokGroup.rotation.y = Math.sin(t * 1.5) * 0.12;
-                }
-                renderer.render(scene, camera);
-            }
-            animate();
-        }
-
-        function switchView(viewName) {
-            document.getElementById('view-home').classList.add('hidden');
-            document.getElementById('view-studio').classList.add('hidden');
-            if(viewName === 'home') {
-                document.getElementById('view-home').classList.remove('hidden');
-            } else if(viewName === 'studio') {
-                document.getElementById('view-studio').classList.remove('hidden');
-                renderPipelineNav();
-                loadStep(currentStep);
-            }
-        }
-
-        function renderPipelineNav() {
-            const nav = document.getElementById('pipeline-nav');
-            if(!nav) return;
-            nav.innerHTML = pipelineSteps.map(s => `
-                <button onclick="loadStep(${s.id}); playSynthStab(300);" class="px-3 py-1.5 rounded-xl font-orbitron text-xs font-bold whitespace-nowrap transition ${currentStep === s.id ? 'bg-brand-magenta text-white glow-box-magenta' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'}">
-                    <i class="fa-solid ${s.icon} mr-1"></i> ${s.id}. ${s.name}
-                </button>
-            `).join('');
-        }
-
-        function loadStep(stepId) {
-            currentStep = stepId;
-            renderPipelineNav();
-            const stepObj = pipelineSteps.find(s => s.id === stepId) || pipelineSteps[1];
-            document.getElementById('active-step-title').innerText = `${stepObj.id}. ${stepObj.name.toUpperCase()}`;
-            const container = document.getElementById('workspace-container');
-
-            if(stepId === 2) {
-                container.innerHTML = `
-                    <div class="space-y-6">
-                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                            <div>
-                                <h3 class="font-orbitron text-lg font-bold text-white">Intelligent 16-Step Beat Sequencer</h3>
-                                <p class="text-xs text-gray-400">Program your groove, upload tracks, or generate multi-syllabic lyrics instantly.</p>
-                            </div>
-                            <div class="flex flex-wrap gap-2">
-                                <label class="px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-orbitron text-xs cursor-pointer hover:bg-white/20">
-                                    <i class="fa-solid fa-upload mr-1"></i> Upload Track
-                                    <input type="file" accept="audio/*" class="hidden" onchange="handleUniversalFileUpload(event)">
-                                </label>
-                                <button onclick="intelligentGenLyricsFromBeat()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-magenta text-black font-orbitron font-black text-xs glow-box-cyan">
-                                    GEN LYRICS
-                                </button>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-8 md:grid-cols-16 gap-2 bg-black/60 p-4 rounded-2xl border border-brand-magenta/40">
-                            ${Array.from({length: 16}).map((_, i) => `
-                                <div onclick="togglePad(this, ${i})" class="h-14 rounded-xl ${beatGrid[i] ? 'bg-brand-magenta border-brand-cyan text-white glow-box-magenta' : 'bg-white/5 border border-white/10 text-gray-400'} cursor-pointer transition flex items-center justify-center font-mono text-xs font-bold ${i%4===0 ? 'border-l-2 border-l-brand-cyan' : ''}">${i+1}</div>
-                            `).join('')}
-                        </div>
-                        <div class="flex flex-wrap items-center justify-between gap-4">
-                            <button onclick="toggleBeatPlayback()" id="beat-play-btn" class="px-6 py-3 rounded-xl bg-brand-magenta text-white font-orbitron font-bold text-xs glow-box-magenta">PLAY PATTERN</button>
-                            <button onclick="renderAndDownloadBeat()" class="px-6 py-3 rounded-xl bg-brand-cyan text-black font-orbitron font-bold text-xs glow-box-cyan">DOWNLOAD BEAT (.WAV)</button>
-                        </div>
-                    </div>
-                `;
-            } else if(stepId === 3) {
-                container.innerHTML = `
-                    <div class="space-y-6">
-                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                            <div>
-                                <h3 class="font-orbitron text-lg font-bold text-white">Intelligent Lyric Matrix & Flow Analyzer</h3>
-                                <p class="text-xs text-gray-400">Generate multi-syllabic rhymes or convert lyric rhythm into a new beat.</p>
-                            </div>
-                            <button onclick="intelligentGenBeatFromLyrics(document.getElementById('lyric-input').value)" class="px-4 py-2 rounded-xl bg-brand-magenta text-white font-orbitron font-black text-xs glow-box-magenta">
-                                GEN BEAT FROM LYRICS
-                            </button>
-                        </div>
-                        <textarea id="lyric-input" class="w-full h-40 bg-black/60 border border-brand-magenta/40 rounded-2xl p-4 text-sm text-white font-mono focus:outline-none focus:border-brand-cyan">${generatedLyricsCache}</textarea>
-                        <button onclick="downloadTextAsFile(document.getElementById('lyric-input').value, 'PRhyme_Lyrics.txt')" class="px-6 py-3 rounded-xl bg-white/10 border border-white/20 text-white font-orbitron font-bold text-xs hover:bg-white/20">
-                            <i class="fa-solid fa-download mr-1"></i> DOWNLOAD LYRICS (.TXT)
-                        </button>
-                    </div>
-                `;
-            } else if(stepId === 6) {
-                container.innerHTML = `
-                    <div class="space-y-6">
-                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                            <div>
-                                <h3 class="font-orbitron text-lg font-bold text-white">Master & New Beat Synthesis (-14 LUFS)</h3>
-                                <p class="text-xs text-gray-400">Produce a broadcast master fused with your new beat via RAM-safe chunked streaming.</p>
-                            </div>
-                            <label class="px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-orbitron text-xs cursor-pointer">
-                                <i class="fa-solid fa-upload mr-1"></i> Upload Master
-                                <input type="file" accept="audio/*" class="hidden" onchange="handleUniversalFileUpload(event)">
-                            </label>
-                        </div>
-                        <div class="bg-black/60 p-6 rounded-2xl border border-brand-cyan/30 space-y-4">
-                            <p class="text-sm text-brand-cyan font-mono" id="active-master-status">Active Track: ${uploadedTrackName ? uploadedTrackName : 'Synthesizing with Current Studio Session'}</p>
-                            <button onclick="renderAndDownloadMasteredFile()" class="w-full py-4 rounded-xl bg-gradient-to-r from-brand-cyan via-brand-magenta to-brand-crimson text-white font-orbitron font-black text-sm glow-box-magenta hover:scale-105 transition">
-                                <i class="fa-solid fa-download mr-1"></i> RENDER STUDIO MASTER (-14 LUFS) & DOWNLOAD
-                            </button>
-                        </div>
-                    </div>
-                `;
-            } else if(stepId === 7) {
-                container.innerHTML = `
-                    <div class="space-y-6 text-center py-12">
-                        <i class="fa-solid fa-file-audio text-5xl text-brand-cyan mb-2 animate-bounce"></i>
-                        <h3 class="font-orbitron text-xl font-bold text-white">Universal File Converter Hub</h3>
-                        <p class="text-xs text-gray-400 max-w-md mx-auto">Upload any audio file to instantly convert and export to broadcast-ready WAV.</p>
-                        <div class="pt-4 flex justify-center">
-                            <label class="px-6 py-3 rounded-xl bg-brand-cyan text-black font-orbitron font-bold text-xs cursor-pointer hover:brightness-110">
-                                <i class="fa-solid fa-cloud-arrow-up mr-2"></i> UPLOAD & CONVERT FILE
-                                <input type="file" accept="audio/*" class="hidden" onchange="handleUniversalFileUpload(event); convertAndDownloadFile()">
-                            </label>
-                        </div>
-                    </div>
-                `;
-            } else if(stepId === 10) {
-                container.innerHTML = `
-                    <div class="space-y-6">
-                        <h3 class="font-orbitron text-lg font-bold text-white">Social Media & Promo Export Hub</h3>
-                        <p class="text-xs text-gray-400">Generate vertical 9:16 video templates, visualizer loops, and automated promo copy for TikTok, Instagram Reels, and YouTube Shorts.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="bg-black/60 p-6 rounded-2xl border border-brand-magenta/40 text-center space-y-4">
-                                <i class="fa-brands fa-tiktok text-3xl text-brand-magenta"></i>
-                                <h4 class="font-orbitron font-bold text-white text-sm">TikTok Visualizer</h4>
-                                <button onclick="alert('TikTok vertical promo exported successfully!')" class="w-full py-2.5 rounded-xl bg-brand-magenta text-white font-orbitron text-xs font-bold">EXPORT 9:16</button>
-                            </div>
-                            <div class="bg-black/60 p-6 rounded-2xl border border-brand-cyan/40 text-center space-y-4">
-                                <i class="fa-brands fa-instagram text-3xl text-brand-cyan"></i>
-                                <h4 class="font-orbitron font-bold text-white text-sm">Instagram Reel Pack</h4>
-                                <button onclick="alert('Instagram Reel promo exported successfully!')" class="w-full py-2.5 rounded-xl bg-brand-cyan text-black font-orbitron text-xs font-bold">EXPORT REEL</button>
-                            </div>
-                            <div class="bg-black/60 p-6 rounded-2xl border border-brand-gold/40 text-center space-y-4">
-                                <i class="fa-brands fa-youtube text-3xl text-brand-gold"></i>
-                                <h4 class="font-orbitron font-bold text-white text-sm">YouTube Audio Wave</h4>
-                                <button onclick="alert('YouTube audio asset exported successfully!')" class="w-full py-2.5 rounded-xl bg-brand-gold text-black font-orbitron text-xs font-bold">EXPORT 1080P</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                container.innerHTML = `
-                    <div class="space-y-6 text-center py-12">
-                        <i class="fa-solid ${stepObj.icon} text-5xl text-brand-magenta mb-2 animate-bounce"></i>
-                        <h3 class="font-orbitron text-xl font-bold text-white">${stepObj.name} Module Active</h3>
-                        <p class="text-xs text-gray-400 max-w-md mx-auto">Fully operational production module with universal upload and download support.</p>
-                        <div class="flex justify-center space-x-3">
-                            <label class="px-5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white font-orbitron text-xs cursor-pointer">
-                                <i class="fa-solid fa-upload mr-1"></i> Upload
-                                <input type="file" accept="audio/*" class="hidden" onchange="handleUniversalFileUpload(event)">
-                            </label>
-                            <button onclick="renderAndDownloadMasteredFile()" class="px-5 py-2.5 rounded-xl bg-brand-magenta text-white font-orbitron font-bold text-xs glow-box-magenta">
-                                <i class="fa-solid fa-download mr-1"></i> Download Output
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        function toggleExplicit() {
-            explicitMode = !explicitMode;
-            document.getElementById('explicit-status').innerText = explicitMode ? "EXPLICIT: ON" : "EXPLICIT: OFF";
-            playSynthStab(330);
-        }
-
-        function togglePad(el, index) {
-            beatGrid[index] = !beatGrid[index];
-            loadStep(2);
-            if(beatGrid[index]) {
-                if(index % 4 === 0) playKick();
-                else if(index % 4 === 2) playSnare();
-                else playHiHat();
-            }
-        }
-
-        function toggleBeatPlayback() {
-            isPlayingBeat = !isPlayingBeat;
-            const btn = document.getElementById('beat-play-btn');
-            if(isPlayingBeat) {
-                btn.innerText = "STOP PATTERN";
-                btn.className = "px-6 py-3 rounded-xl bg-brand-cyan text-black font-orbitron font-bold text-xs glow-box-cyan";
-                let step = 0;
-                beatIntervalId = setInterval(() => {
-                    if(beatGrid[step]) {
-                        if(step % 4 === 0) playKick();
-                        else if(step % 4 === 2) playSnare();
-                        else playHiHat();
-                    }
-                    step = (step + 1) % 16;
-                }, 175);
-            } else {
-                btn.innerText = "PLAY PATTERN";
-                btn.className = "px-6 py-3 rounded-xl bg-brand-magenta text-white font-orbitron font-bold text-xs glow-box-magenta";
-                clearInterval(beatIntervalId);
-            }
-        }
-
-        async function renderAndDownloadBeat() {
-            alert("Rendering beat pattern directly to downloads folder...");
-            const sampleRate = 44100;
-            const offlineCtx = new OfflineAudioContext(2, sampleRate * 4, sampleRate);
-            const buffer = await offlineCtx.startRendering();
-            const blob = audioBufferToWavBlob(buffer);
-            await downloadMasteredFile(blob, "PRhyme_Generated_Beat.wav");
-        }
-
-        function downloadTextAsFile(text, filename) {
-            const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = filename;
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(url), 1000);
-        }
-
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+      // Interactive step sequencer toggling
+      document.querySelectorAll('.step').forEach(step => {
+        step.addEventListener('click', () => {
+          step.classList.toggle('on');
+        });
+      });
     </script>
-</body>
+  </body>
 </html>
