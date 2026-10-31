@@ -92,25 +92,11 @@
       .principle h3 { font-size: 1rem; margin-bottom: .3rem; }
       .principle p { font-size: .9rem; color: var(--muted); margin: 0; }
 
-      /* Panels & Studio */
-      .panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.2rem; margin-top: 1rem; }
-      .panel h3 { font-size: 1.1rem; margin-bottom: 0.8rem; }
-      .seq-wrap { overflow-x: auto; padding-bottom: 0.5rem; }
-      .seq { display: flex; align-items: center; gap: 4px; min-width: 500px; }
-      .rl { font-family: "IBM Plex Mono", monospace; font-size: 0.75rem; width: 50px; color: var(--muted); }
-      .step { width: 24px; height: 32px; border-radius: 4px; border: 1px solid var(--line); background: var(--field); cursor: pointer; }
-      .step.on { background: var(--teal-dim); border-color: var(--teal); }
-      .transport { display: flex; align-items: center; gap: 1rem; margin-top: 1rem; }
-      .bpm-big { font-family: "IBM Plex Mono", monospace; font-size: 1.2rem; font-weight: 700; background: var(--field); border: 1px solid var(--line); padding: 0.3rem 0.8rem; border-radius: 8px; }
-
       /* DJ Stage */
       .dj-stage { margin-top: 1.2rem; background: #07090d; color: #e8f4f1; border: 1px solid var(--line); border-radius: 16px; padding: 1.1rem 1rem 1rem; overflow: hidden; }
       .dj-stage-head { display: flex; justify-content: space-between; align-items: center; gap: .6rem 1rem; flex-wrap: wrap; }
       .dj-stage-head h3 { font-size: 1.2rem; color: #e8f4f1; }
       .dj-booth { position: relative; z-index: 2; margin-top: .8rem; background: #10141a; border: 1px solid #2a323d; border-radius: 14px; padding: .9rem; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: .9rem; align-items: center; }
-      .deck { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; text-align: center; }
-      .platter { width: 80px; height: 80px; margin: 0.6rem auto; border-radius: 50%; border: 4px solid var(--line); background: var(--field); }
-      .xfader { text-align: center; padding: 0 0.5rem; }
       
       /* Buttons */
       .btn { border: 1px solid var(--line); background: var(--chip); color: var(--ink); font-weight: 700; padding: .65rem 1.2rem; border-radius: 11px; display: inline-flex; align-items: center; gap: .5rem; }
@@ -192,19 +178,19 @@
           <div class="seq-wrap">
             <div class="seq">
               <span class="rl">Kick</span>
-              <button class="step on"></button>
+              <button class="step beat on"></button>
               <button class="step"></button>
               <button class="step"></button>
               <button class="step"></button>
-              <button class="step on"></button>
+              <button class="step beat on"></button>
               <button class="step"></button>
               <button class="step"></button>
               <button class="step"></button>
-              <button class="step on"></button>
+              <button class="step beat on"></button>
               <button class="step"></button>
               <button class="step"></button>
               <button class="step"></button>
-              <button class="step on"></button>
+              <button class="step beat on"></button>
               <button class="step"></button>
               <button class="step"></button>
               <button class="step"></button>
@@ -232,16 +218,16 @@
           <div class="dj-booth">
             <div class="deck">
               <strong>Deck A</strong>
-              <div class="platter"></div>
+              <div class="platter spin"></div>
               <span class="mono">124.0 BPM</span>
             </div>
             <div class="xfader">
               <label class="mono">Crossfader</label><br />
               <input type="range" min="0" max="100" value="50" />
             </div>
-            <div class="deck">
+            <div class="deck b">
               <strong>Deck B</strong>
-              <div class="platter"></div>
+              <div class="platter spin"></div>
               <span class="mono">124.0 BPM</span>
             </div>
           </div>
@@ -270,13 +256,6 @@
       function toggleBigText() {
         document.body.classList.toggle('bigtext');
       }
-
-      // Interactive step sequencer toggling
-      document.querySelectorAll('.step').forEach(step => {
-        step.addEventListener('click', () => {
-          step.classList.toggle('on');
-        });
-      });
     </script>
   </body>
 </html>
