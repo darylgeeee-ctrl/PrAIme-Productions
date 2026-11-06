@@ -1,0 +1,30 @@
+name: PrAIme development checks
+
+on:
+  push:
+    branches:
+      - "rebuild/**"
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        run: |
+          node --check app.js
+          node --check assistant.js
+          node --check sw.js
+      - name: Run interface and offline-shell smoke checks
+        run: node scripts/smoke-test.mjs
