@@ -6,9 +6,9 @@ const app = readFileSync("app.js", "utf8");
 const assistant = readFileSync("assistant.js", "utf8");
 const worker = readFileSync("sw.js", "utf8");
 
-const ids = new Set([...html.matchAll(/\\bid=["']([^"']+)["']/g)].map(m => m[1]));
+const ids = new Set([...html.matchAll(/\bid=["']([^"']+)["']/g)].map(m => m[1]));
 for (const [file, source] of [["app.js", app], ["assistant.js", assistant]]) {
-  for (const match of source.matchAll(/\\$\\(["']#([^"' ]+)/g)) {
+  for (const match of source.matchAll(/\$\(["']#([^"' ]+)/g)) {
     assert(ids.has(match[1]), `${file} references missing HTML id #${match[1]}`);
   }
 }
