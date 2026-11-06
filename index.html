@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090b13"><meta name="description" content="PrAIme Productions — mobile-first music creation studio">
+<link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml"><link rel="stylesheet" href="./styles.css">
+<title>PrAIme Productions</title>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="#" aria-label="PrAIme Productions home"><span class="brandmark">P</span><span>PrAIme <b>Productions</b></span></a><div class="top-actions"><span id="saveStatus" class="status">Ready</span><button id="installBtn" class="ghost" hidden>Install app</button></div></header>
+<div class="shell">
+<aside class="sidebar" aria-label="Main navigation">
+<button class="nav active" data-page="studio">Studio</button><button class="nav" data-page="beatlab">Beat Lab</button><button class="nav" data-page="projects">Projects</button><button class="nav" data-page="tools">Tools</button>
+<div class="side-note"><span class="dot"></span> Local-first workspace</div>
+</aside>
+<main>
+<section id="studio" class="page active">
+<div class="eyebrow">YOUR CREATIVE WORKSPACE</div><h1>Make something <span>that moves.</span></h1><p class="intro">Build a beat, shape your sound, and save your work directly on this device.</p>
+<div class="panel transport"><div><div class="eyebrow">TRANSPORT</div><div class="transport-buttons"><button id="playBtn" class="primary">▶ Play</button><button id="stopBtn" class="ghost">■ Stop</button><button id="clearBtn" class="ghost">Clear pattern</button></div></div><label class="tempo">TEMPO <span><input id="bpm" type="number" min="40" max="220" value="124"> BPM</span></label></div>
+<div class="panel"><div class="panel-head"><div><div class="eyebrow">STEP SEQUENCER</div><h2>Beat Lab</h2></div><span class="tag">16 steps · 4 tracks</span></div><div id="sequencer" class="sequencer" aria-label="16 step drum sequencer"></div><div class="legend"><span>Tap a step to toggle it</span><span id="playheadLabel">16-step pattern</span></div></div>
+<div class="panel controls"><label>MASTER LEVEL <input id="master" type="range" min="0" max="100" value="75"></label><label>SWING <input id="swing" type="range" min="0" max="45" value="0"></label></div>
+</section>
+<section id="beatlab" class="page"><div class="eyebrow">RHYTHM WORKSHOP</div><h1>Beat <span>Lab.</span></h1><p class="intro">Program kick, snare, hi-hat and clap patterns. Changes are saved automatically in this browser.</p><div class="panel"><div class="panel-head"><h2>Pattern presets</h2></div><div class="preset-row"><button class="ghost" data-preset="trap">Trap</button><button class="ghost" data-preset="boom">Boom bap</button><button class="ghost" data-preset="house">House</button><button class="ghost" data-preset="empty">Empty</button></div><p class="muted">Presets replace the current 16-step pattern. You can undo this by selecting another preset or importing a saved project.</p></div></section>
+<section id="projects" class="page"><div class="eyebrow">YOUR FILES</div><h1>Project <span>vault.</span></h1><p class="intro">Save and move your beat projects as portable JSON files.</p><div class="panel project-actions"><button id="saveBtn" class="primary">Save project</button><button id="exportBtn" class="ghost">Export project</button><label class="file-button ghost">Import project<input id="importFile" type="file" accept=".json,application/json"></label><button id="resetBtn" class="ghost">Reset project</button></div><div class="panel"><h2>Current project</h2><p id="projectInfo" class="muted">Untitled beat · 124 BPM</p><p class="muted">Autosave is stored locally in this browser. Export a backup before clearing browser data or changing devices.</p></div></section>
+<section id="tools" class="page"><div class="eyebrow">STUDIO TOOLS</div><h1>Built to <span>grow.</span></h1><div class="panel"><h2>Engine status</h2><p class="muted">The sequencer uses Web Audio synthesis in your browser. This starter build does not yet include full-song AI generation, multitrack recording, mastering export, marketplace payments, or cloud collaboration.</p><p class="muted">Those modules will be added and tested separately; unavailable features are not presented as working controls.</p></div><div class="panel"><h2>Rokdabus Prhyme</h2><p class="muted">Assistant integration is planned. Local Ollama support will be optional and will not be required to open or use the studio.</p></div></section>
+</main></div><footer>PrAIme Productions <span>·</span> Development build</footer>
+<script src="./app.js" defer></script>
+</body></html>
