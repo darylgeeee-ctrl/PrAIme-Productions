@@ -18,7 +18,7 @@ for (const match of html.matchAll(/data-page=["']([^"']+)["']/g)) {
 }
 
 for (const asset of ["index.html", "styles.css", "app.js", "assistant.js", "manifest.webmanifest", "icon.svg"]) {
-  assert(worker.includes(`"${asset}"`), `Offline shell does not precache ${asset}`);
+  assert(worker.includes(`"./${asset}"`), `Offline shell does not precache ${asset}`);
 }
 
 assert(worker.includes('key.startsWith(CACHE_PREFIX)'), "Cache cleanup must be limited to PrAIme caches");
