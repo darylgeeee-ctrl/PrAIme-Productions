@@ -1,7 +1,9 @@
 (()=>{"use strict";
 const $=s=>document.querySelector(s), tracks=["Kick","Snare","Hat","Clap"], steps=16;
 let pattern=[[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],[0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0]];
-let audio=null,master=null,limiter=null,timer=null,stepIndex=0,nextTime=0,projectName="Untitled beat",dirty=false,installPrompt=null;\nconst activeNodes=new Set();\nfunction trackNode(node){activeNodes.add(node);node.addEventListener("ended",()=>activeNodes.delete(node),{once:true});return node}
+let audio=null,master=null,limiter=null,timer=null,stepIndex=0,nextTime=0,projectName="Untitled beat",dirty=false,installPrompt=null;
+const activeNodes=new Set();
+function trackNode(node){activeNodes.add(node);node.addEventListener("ended",()=>activeNodes.delete(node),{once:true});return node}
 const clone=p=>p.map(r=>r.slice());
 function status(t){$("#saveStatus").textContent=t}
 function draw(){const root=$("#sequencer");root.innerHTML="";tracks.forEach((name,r)=>{const row=document.createElement("div");row.className="track";const label=document.createElement("span");label.className="track-name";label.textContent=name;row.append(label);for(let c=0;c<steps;c++){const b=document.createElement("button");b.className="step"+(pattern[r][c]?" on":"");b.setAttribute("aria-label",name+" step "+(c+1)+(pattern[r][c]?", on":", off"));b.setAttribute("aria-pressed",String(!!pattern[r][c]));b.addEventListener("click",()=>{pattern[r][c]=pattern[r][c]?0:1;draw();changed()});row.append(b)}root.append(row)})}
